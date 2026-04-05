@@ -17,9 +17,9 @@ public interface ISport {
     * Used by other components to assign points dynamically
     * instead of hardcoding values (e.g., 3/1/0 in football).
     */
-    int getWinPoint();
-    int getDrawPoint();
-    int getLossPoint();
+    int getWinPoints();
+    int getDrawPoints();
+    int getLossPoints();
 
     //Setters
     void setSportName(String sportName);
@@ -27,9 +27,9 @@ public interface ISport {
     void setSubstituteCount(int substituteCount);
     void setSubstituteChangeLimit(int substituteChangeLimit);
     void setTeamCount(int teamCount);
-    void setWinPoint(int winPoint);
-    void setDrawPoint(int drawPoint);
-    void setLossPoint(int lossPoint);
+    void setWinPoints(int winPoints);
+    void setDrawPoints(int drawPoints);
+    void setLossPoints(int lossPoints);
     void setPeriodCount(int periodCount);
     void setAvailableTactics(List<String> availableTactics);
     void setMatchupsPerTeam(int matchupsPerTeam);
@@ -37,4 +37,5 @@ public interface ISport {
     // Core Methods
     void generateLeague();
     void generateTeams();
+    void displayRules();
 }
