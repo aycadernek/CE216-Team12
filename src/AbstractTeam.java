@@ -72,6 +72,9 @@ public abstract class AbstractTeam {
     }
 
     public void changeTactic(String newTactic) {
-        this.tactic = newTactic;
+        if (newTactic == null || newTactic.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tactic cannot be empty.");
+        }
+        this.tactic = newTactic.trim();
     }
 }
