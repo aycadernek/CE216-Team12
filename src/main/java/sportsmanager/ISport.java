@@ -1,3 +1,5 @@
+package sportsmanager;
+
 import java.util.List;
 
 public interface ISport {
