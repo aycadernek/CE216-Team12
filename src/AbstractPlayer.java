@@ -6,8 +6,8 @@ public abstract class AbstractPlayer {
     private int injuryRemainingDuration;
 
     public AbstractPlayer(String name, String position) {
-        this.name = name;
-        this.position = position;
+        setName(name);
+        setPosition(position);
         this.isInjured = false;
         this.injuryRemainingDuration = 0;
     }
@@ -17,7 +17,10 @@ public abstract class AbstractPlayer {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Player name cannot be empty.");
+        }
+        this.name = name.trim();
     }
 
     public String getPosition() {
@@ -25,7 +28,10 @@ public abstract class AbstractPlayer {
     }
 
     public void setPosition(String position) {
-        this.position = position;
+        if (position == null || position.trim().isEmpty()) {
+            throw new IllegalArgumentException("Player position cannot be empty.");
+        }
+        this.position = position.trim();
     }
 
     public boolean isInjured() {
@@ -45,16 +51,17 @@ public abstract class AbstractPlayer {
     }
 
     public void setInjuryRemainingDuration(int duration) {
-        this.injuryRemainingDuration = duration;
-
-        if (duration > 0) {
-            this.isInjured = true;
-        } else {
-            this.isInjured = false;
+        if (duration < 0) {
+            throw new IllegalArgumentException("Injury duration cannot be negative.");
         }
+        this.injuryRemainingDuration = duration;
+        this.isInjured = duration > 0;
     }
 
     public void makeInjury(int duration) {
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Injury duration must be greater than 0");
+        }
         this.isInjured = true;
         this.injuryRemainingDuration = duration;
     }
