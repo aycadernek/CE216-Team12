@@ -2,7 +2,6 @@ package sportsmanager;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class FootballLeague extends AbstractLeague {
 
@@ -17,11 +16,11 @@ public class FootballLeague extends AbstractLeague {
         int numTeams = teams.size();
         boolean odd = (numTeams % 2 != 0);
         int numWeeksInHalf = (odd ? numTeams : numTeams - 1);
-        int halfSize = numTeams / 2;
 
         List<AbstractTeam> tempTeams = new ArrayList<>(teams);
         if (odd) tempTeams.add(null); 
         numTeams = tempTeams.size();
+        int halfSize = numTeams / 2;
 
         int currentWeekCount = 1; 
         for (int week = 0; week < numWeeksInHalf; week++) {
@@ -39,7 +38,7 @@ public class FootballLeague extends AbstractLeague {
                 }
             }
 
-            getWeeklyFixtures().put(currentWeekCount++, matchesForThisWeek);
+            addWeeklyFixture(currentWeekCount++, matchesForThisWeek);
         }
         
         for (int week = 1; week <= numWeeksInHalf; week++) {
@@ -52,7 +51,7 @@ public class FootballLeague extends AbstractLeague {
                     (FootballTeam)m.getTeam1() 
                 ));
             }
-            getWeeklyFixtures().put(currentWeekCount++, reversedMatchesForThisWeek);
+            addWeeklyFixture(currentWeekCount++, reversedMatchesForThisWeek);
         }
         setTotalWeeks(currentWeekCount - 1);
     }
@@ -61,6 +60,12 @@ public class FootballLeague extends AbstractLeague {
     public void playWeeklyMatch() {
         if (getCurrentWeek() > getTotalWeeks()) return;
         List<AbstractMatch> currentWeekMatches = getMatchesForWeek(getCurrentWeek());
+        
+        if (currentWeekMatches.isEmpty()) {
+            advanceWeek();
+            return;
+        }
+
         boolean weekFinalized = false;
         for (AbstractMatch match : currentWeekMatches) {
             if (!match.isFinished()) {
@@ -71,13 +76,23 @@ public class FootballLeague extends AbstractLeague {
         }
         for (AbstractMatch match : currentWeekMatches) {
             if (match.isFinished() && !getCompletedMatches().contains(match)) {
-                getCompletedMatches().add(match);
+                addCompletedMatch(match);
                 updateTeamStats(match);
                 weekFinalized = true;
             }
         }
         if (weekFinalized) {
             decrementInjuries();
+        }
+        
+        boolean allFinished = true;
+        for (AbstractMatch match : currentWeekMatches) {
+            if (!match.isFinished()) {
+                allFinished = false;
+                break;
+            }
+        }
+        if (allFinished) {
             advanceWeek();
         }
     }
@@ -109,7 +124,7 @@ public class FootballLeague extends AbstractLeague {
 
     @Override
     public void calculateLeagueResult() {
-        Collections.sort(getTeams(), (t1, t2) -> {
+        sortTeams((t1, t2) -> {
             int points1 = (t1.getWinCount() * 3) + t1.getDrawCount();
             int points2 = (t2.getWinCount() * 3) + t2.getDrawCount();
             

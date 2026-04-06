@@ -15,6 +15,12 @@ public abstract class AbstractMatch {
     private List<String> events;
 
     public AbstractMatch(AbstractTeam team1, AbstractTeam team2, int totalPeriods) {
+        if (team1 == null || team2 == null) {
+            throw new IllegalArgumentException("Teams cannot be null.");
+        }
+        if (team1.equals(team2)) {
+            throw new IllegalArgumentException("A team cannot play against itself.");
+        }
         this.team1 = team1;
         this.team2 = team2;
         this.totalPeriods = totalPeriods;
@@ -26,16 +32,26 @@ public abstract class AbstractMatch {
     }
 
     public AbstractTeam getTeam1() { return team1; }
-    public void setTeam1(AbstractTeam team) { this.team1 = team; }
+    public void setTeam1(AbstractTeam team) { 
+        if (team == null) throw new IllegalArgumentException("Team 1 cannot be null.");
+        this.team1 = team; 
+    }
     
     public AbstractTeam getTeam2() { return team2; }
-    public void setTeam2(AbstractTeam team) { this.team2 = team; }
+    public void setTeam2(AbstractTeam team) { 
+        if (team == null) throw new IllegalArgumentException("Team 2 cannot be null.");
+        this.team2 = team; 
+    }
     
     public int getTeam1Score() { return team1Score; }
-    public void setTeam1Score(int score) { this.team1Score = score; }
+    public void setTeam1Score(int score) { 
+        if (score >= 0) this.team1Score = score; 
+    }
     
     public int getTeam2Score() { return team2Score; }
-    public void setTeam2Score(int score) { this.team2Score = score; }
+    public void setTeam2Score(int score) { 
+        if (score >= 0) this.team2Score = score; 
+    }
     
     public String getResult() { return result; }
     public void setResult(String result) { this.result = result; }

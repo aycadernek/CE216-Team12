@@ -66,12 +66,14 @@ public class FootballMatch extends AbstractMatch {
         }
     }
     private void handleGoal(FootballTeam team, String timeStr) {
+        FootballPlayer scorer = getRandomPlayer(team);
+        if (scorer == null) return;
+        
         if (team == getTeam1()) setTeam1Score(getTeam1Score() + 1);
         else setTeam2Score(getTeam2Score() + 1);
         
-        FootballPlayer scorer = getRandomPlayer(team);
-        if (scorer != null && !scorer.isInjured()) scorer.scoreGoal();
-        getEvents().add(timeStr + ": GOAL! " + team.getName() + " (" + (scorer != null ? scorer.getName() : "Player") + ")");
+        if (!scorer.isInjured()) scorer.scoreGoal();
+        getEvents().add(timeStr + ": GOAL! " + team.getName() + " (" + scorer.getName() + ")");
     }
 
     private void handleYellowCard(FootballTeam team, String timeStr) {
@@ -156,7 +158,8 @@ public class FootballMatch extends AbstractMatch {
         return (FootballPlayer) active.get(idx);
     }
     
-   private void updateResultString() {
+   protected void updateResultString() {
+        if (!isFinished()) return;
         if (getTeam1Score() > getTeam2Score()) {
             setResult(getTeam1().getName() + " Won");
         } else if (getTeam2Score() > getTeam1Score()) {
@@ -165,4 +168,5 @@ public class FootballMatch extends AbstractMatch {
             setResult("Draw");
         }
     }
+    
 }

@@ -3,6 +3,7 @@ package sportsmanager;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public abstract class AbstractLeague {
@@ -29,14 +30,30 @@ public abstract class AbstractLeague {
     public String getLeagueName() { return leagueName; }
     public ISport getSportType() { return sportType; }
     
-    public List<AbstractTeam> getTeams() { return teams; }
+    public List<AbstractTeam> getTeams() { 
+        return Collections.unmodifiableList(teams); 
+    }
+    
     public void addTeam(AbstractTeam team) {
+        if (team == null || this.currentWeek > 1) {
+            return;
+        }
         if (!this.teams.contains(team)) {
             this.teams.add(team);
         }
     }
 
-    public Map<Integer, List<AbstractMatch>> getWeeklyFixtures() { return weeklyFixtures; }
+    public Map<Integer, List<AbstractMatch>> getWeeklyFixtures() { 
+        return Collections.unmodifiableMap(weeklyFixtures); 
+    }
+
+    public void addWeeklyFixture(int week, List<AbstractMatch> matches) {
+        this.weeklyFixtures.put(week, matches);
+    }
+    
+    public void sortTeams(java.util.Comparator<AbstractTeam> comparator) {
+        this.teams.sort(comparator);
+    }
     
 
     public List<AbstractMatch> getMatchesForWeek(int week) {
@@ -51,11 +68,23 @@ public abstract class AbstractLeague {
         return all;
     }
 
-    public List<AbstractMatch> getCompletedMatches() { return completedMatches; }
+    public List<AbstractMatch> getCompletedMatches() { 
+        return Collections.unmodifiableList(completedMatches); 
+    }
+
+    public void addCompletedMatch(AbstractMatch match) {
+        if (!this.completedMatches.contains(match)) {
+            this.completedMatches.add(match);
+        }
+    }
     
     public int getCurrentWeek() { return currentWeek; }
     public int getTotalWeeks() { return totalWeeks; }
-    public void setTotalWeeks(int totalWeeks) { this.totalWeeks = totalWeeks; }
+    public void setTotalWeeks(int totalWeeks) { 
+        if (totalWeeks >= 0) {
+            this.totalWeeks = totalWeeks; 
+        }
+    }
 
     public void advanceWeek() {
         if (currentWeek < totalWeeks) {
