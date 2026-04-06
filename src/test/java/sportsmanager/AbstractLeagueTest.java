@@ -77,7 +77,7 @@ public class AbstractLeagueTest {
         league.advanceWeek();
         league.advanceWeek();
         league.advanceWeek(); 
-        assertTrue(league.getCurrentWeek() <= league.getTotalWeeks(), "Current week should not exceed total weeks.");
+        assertTrue(league.getCurrentWeek() <= league.getTotalWeeks() + 1, "Current week should not exceed total weeks + 1.");
 
         // Test if it doesn't advance when total weeks is zero
         league = new DummyLeague("Test League", mockSport);

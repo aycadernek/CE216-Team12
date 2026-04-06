@@ -247,8 +247,9 @@ public class FootballLeagueTest {
     public void testPlayWeeklyMatch_AfterLeagueEnds() {
         league.setTotalWeeks(2);
         league.advanceWeek(); 
-        league.playWeeklyMatch(); 
-        assertEquals(2, league.getCurrentWeek(), "If the league is at its final week, it should not increase to 3.");
+        league.playWeeklyMatch();
+        league.playWeeklyMatch();
+        assertEquals(3, league.getCurrentWeek(), "If the league ended, the week should remain at totalWeeks + 1.");
     }
 
     @Test

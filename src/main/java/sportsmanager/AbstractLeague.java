@@ -87,7 +87,7 @@ public abstract class AbstractLeague {
     }
 
     public void advanceWeek() {
-        if (currentWeek < totalWeeks) {
+        if (currentWeek <= totalWeeks) {
             currentWeek++;
         }
     }
