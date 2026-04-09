@@ -7,16 +7,14 @@ public class GameStatus {
 
     private String username;
     private ISport currentSport;
-    private int currentWeek;
-    //private AbstractTeam userTeam;
-    //private AbstractLeague currentLeague;
+    private AbstractLeague currentLeague;
+    private String status;
 
     public GameStatus() {
             this.username = "";
             this.currentSport = null;
-            this.currentWeek = 0;
-            //this.userTeam = null;
-            //this.currentLeague = null;
+            this.currentLeague = null;
+            this.status = NOT_STARTED;
         }
 
     public String getUsername() {
@@ -27,14 +25,6 @@ public class GameStatus {
         this.username = username;
     }
 
-    /* public AbstractTeam getUserTeam() {
-        return userTeam;
-    }
-
-    public void setUserTeam(AbstractTeam userTeam) {
-        this.userTeam = userTeam;
-    } */
-
     public ISport getCurrentSport() {
         return currentSport;
     }
@@ -43,34 +33,40 @@ public class GameStatus {
         this.currentSport = currentSport;
     }
 
-    /* public AbstractLeague getCurrentLeague() {
+    public AbstractLeague getCurrentLeague() {
         return currentLeague;
     } 
     
     public void setCurrentLeague(AbstractLeague currentLeague) {
         this.currentLeague = currentLeague;
-    }*/
+    }
+
+    public String getStatus() {
+        return status;
+    }
 
     public int getCurrentWeek() {
-        return currentWeek;
+        if (currentLeague != null) {
+            return currentLeague.getCurrentWeek();
+        }
+        return 0;
     }
 
-    public void setCurrentWeek(int currentWeek) {
-        this.currentWeek = currentWeek;
-    }
-
-    public void startNewGame(String username, ISport sport) {
+    public void startNewGame(String username, ISport sport, AbstractLeague league) {
         this.username = username;
         this.currentSport = sport;
-        this.currentWeek = 1;
-        //more to be impemented with Abstractleague
+        this.currentLeague = league;
+        this.status = IN_PROGRESS;
     }
 
-       
-        
+    public void finishGame() {
+        this.status = FINISHED;
+    }
+            
     public boolean isLeagueOver() {
-        return currentWeek > 10; // to be implemented with Abstractleague
-    }
-
-        
+        if (currentLeague == null) {
+            return false;
+        }
+        return currentLeague.getCurrentWeek() > currentLeague.getTotalWeeks();
+    }  
 }
