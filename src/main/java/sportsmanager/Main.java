@@ -10,7 +10,6 @@ public class Main {
 
         GameStatus gameStatus = new GameStatus();
         gameStatus.setUsername("Team12");
-        gameStatus.setCurrentWeek(1);
 
         ISport football = new Football();
         gameStatus.setCurrentSport(football);
@@ -40,7 +39,6 @@ public class Main {
 
         System.out.println("=== GAME STATUS ===");
         System.out.println("User: " + gameStatus.getUsername());
-        System.out.println("Week: " + gameStatus.getCurrentWeek());
 
         //Loading
         for (int i = 0; i < 3; i++) {
