@@ -82,11 +82,10 @@ public class Main {
             System.out.print(".");
             Thread.sleep(750);
         }
-
-        System.out.println("\nKickoff!!");
-        Thread.sleep(1000);
+        System.out.println();
 
         match.playPeriod(); //First Half
+        printMatchEvents(match);
 
         Thread.sleep(1000);
 
@@ -123,13 +122,8 @@ public class Main {
                 System.out.println("Invalid choice. No tactic change made.");
         }
 
-        System.out.print("Second half starting");
-        for (int i = 0; i < 3; i++) {
-            System.out.print(".");
-            Thread.sleep(600);
-        }
-        
         match.playPeriod(); //Second Half
+        printMatchEvents(match);
 
         Thread.sleep(1000);
 
@@ -139,5 +133,18 @@ public class Main {
         System.out.println("Result: " + match.getResult());
 
         scanner.close();
+    }
+
+    private static void printMatchEvents(FootballMatch match) {
+        List<String> events = match.getEvents();
+        for (String event : events) {
+            System.out.println(event);
+            try {
+                Thread.sleep(400); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        events.clear(); 
     }
 }

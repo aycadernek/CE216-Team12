@@ -1,15 +1,21 @@
 package sportsmanager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
 public class FootballMatch extends AbstractMatch {
 
     private Random random;
+    private Queue<Integer> plannedEventMinutes;
 
     public FootballMatch(AbstractTeam team1, AbstractTeam team2) {
         super(team1, team2, 2); 
         this.random = new Random();
+        this.plannedEventMinutes = new LinkedList<>();
     }
 
     @Override
@@ -21,6 +27,14 @@ public class FootballMatch extends AbstractMatch {
         getEvents().add("--- " + periodStr + " STARTED ---");
 
         int eventCount = random.nextInt(6) + 10;
+        List<Integer> eventMinutes = new ArrayList<>();
+        for (int i = 0; i < eventCount; i++) {
+            int min = random.nextInt(45) + (getCurrentPeriod() == 1 ? 1 : 46);
+            eventMinutes.add(min);
+        }
+        Collections.sort(eventMinutes);
+        plannedEventMinutes.addAll(eventMinutes);
+
         for (int i = 0; i < eventCount; i++) {
             createEvent();
         }
@@ -31,12 +45,18 @@ public class FootballMatch extends AbstractMatch {
             updateResultString();
         }
     }
+
     @Override
     public void createEvent() {
         if (isFinished()) return;
         
         int eventProbability = random.nextInt(30); 
-        String timeStr = "Min " + (random.nextInt(45) + (getCurrentPeriod() == 1 ? 1 : 46)) + "'";
+        
+        int minute = plannedEventMinutes.isEmpty() 
+            ? (random.nextInt(45) + (getCurrentPeriod() == 1 ? 1 : 46))
+            : plannedEventMinutes.poll();
+            
+        String timeStr = "Min " + minute + "'";
         
         FootballTeam home = (FootballTeam) getTeam1();
         FootballTeam away = (FootballTeam) getTeam2();
