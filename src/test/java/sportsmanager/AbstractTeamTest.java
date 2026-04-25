@@ -11,6 +11,17 @@ public class AbstractTeamTest {
         public DummyTeam(String name, String coach, String tactic) {
             super(name, coach, tactic);
         }
+
+        @Override
+        public void addPlayerToRoster(AbstractPlayer player) {}
+
+        @Override
+        public void setMatchDayLineup(java.util.List<AbstractPlayer> starters, java.util.List<AbstractPlayer> bench) {}
+
+        @Override
+        public boolean isReadyToPlay() {
+            return false;
+        }
     }
 
     // create a dummy player

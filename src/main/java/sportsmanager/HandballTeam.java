@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FootballTeam extends AbstractTeam {
-    private static final int MAX_ROSTER_SIZE = 18;
-    private static final int PLAYERS_ON_FIELD = 11;
+public class HandballTeam extends AbstractTeam {
+    private static final int MAX_ROSTER_SIZE = 7;
+    private static final int PLAYERS_ON_FIELD = 7;
 
-    private static final List<String> VALID_TACTICS = Arrays.asList(
-            "4-4-2", "4-3-3", "3-5-2", "5-3-2", "4-2-3-1"
-    );
+    private static final List<String> VALID_TACTICS = Arrays.asList("6-0", "5-1", "4-2", "3-2-1", "3-3");
 
-    public FootballTeam() {
+    public HandballTeam() {
     }
 
-    public FootballTeam(String name, String coach, String initialTactic) {
+    public HandballTeam(String name, String coach, String initialTactic) {
         super(name, coach, initialTactic);
         validateTactic(initialTactic);
     }
@@ -23,7 +21,7 @@ public class FootballTeam extends AbstractTeam {
     private void validateTactic(String tactic) {
         if (tactic == null || !VALID_TACTICS.contains(tactic)) {
             throw new IllegalArgumentException(
-                    "Invalid football tactic: " + tactic + ". Allowed tactics: " + VALID_TACTICS
+                    "Invalid handball tactic: " + tactic + ". Allowed tactics: " + VALID_TACTICS
             );
         }
     }
@@ -33,12 +31,12 @@ public class FootballTeam extends AbstractTeam {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null.");
         }
-        if (!(player instanceof FootballPlayer)) {
-            throw new IllegalArgumentException("Only football players can be added to a football team.");
+        if (!(player instanceof HandballPlayer)) {
+            throw new IllegalArgumentException("Only handball players can be added to a handball team.");
         }
         if (getAllPlayers().size() >= MAX_ROSTER_SIZE) {
             throw new IllegalStateException(
-                    "Cannot add player. Football team roster is capped at " + MAX_ROSTER_SIZE + " players."
+                    "Cannot add player. Handball team roster is capped at " + MAX_ROSTER_SIZE + " players."
             );
         }
         getAllPlayers().add(player);
@@ -51,7 +49,7 @@ public class FootballTeam extends AbstractTeam {
         }
         if (starters.size() != PLAYERS_ON_FIELD) {
             throw new IllegalArgumentException(
-                    "A football match requires exactly " + PLAYERS_ON_FIELD + " starting players."
+                    "A handball match requires exactly " + PLAYERS_ON_FIELD + " starting players."
             );
         }
         if (starters.size() + bench.size() > MAX_ROSTER_SIZE) {
@@ -78,7 +76,7 @@ public class FootballTeam extends AbstractTeam {
     @Override
     public String toString() {
         return String.format(
-                "FootballTeam{name='%s', coach='%s', tactic='%s', rosterSize=%d}",
+                "HandballTeam{name='%s', coach='%s', tactic='%s', rosterSize=%d}",
                 getName(), getCoach(), getTactic(), getAllPlayers().size()
         );
     }

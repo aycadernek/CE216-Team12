@@ -9,7 +9,10 @@ import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-@JsonSubTypes({ @JsonSubTypes.Type(value = FootballTeam.class, name = "FootballTeam") })
+@JsonSubTypes({ 
+    @JsonSubTypes.Type(value = FootballTeam.class, name = "FootballTeam"),
+    @JsonSubTypes.Type(value = HandballTeam.class, name = "HandballTeam")
+})
 public abstract class AbstractTeam {
 
     private String name;
@@ -89,4 +92,7 @@ public abstract class AbstractTeam {
         }
         this.tactic = newTactic.trim();
     }
+    public abstract void addPlayerToRoster(AbstractPlayer player);
+    public abstract void setMatchDayLineup(List<AbstractPlayer> starters, List<AbstractPlayer> bench);
+    public abstract boolean isReadyToPlay();
 }
