@@ -1,11 +1,15 @@
 package sportsmanager;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({ @JsonSubTypes.Type(value = FootballLeague.class, name = "FootballLeague") })
 public abstract class AbstractLeague {
     private String leagueName;
     private ISport sportType;
@@ -16,6 +20,9 @@ public abstract class AbstractLeague {
     
     private int currentWeek;
     private int totalWeeks;
+
+    protected AbstractLeague() {
+    }
 
     public AbstractLeague(String leagueName, ISport sportType) {
         this.leagueName = leagueName;
@@ -32,6 +39,16 @@ public abstract class AbstractLeague {
     
     public List<AbstractTeam> getTeams() { 
         return Collections.unmodifiableList(teams); 
+    }
+    
+    public AbstractTeam getTeamByName(String name) {
+        if (name == null) return null;
+        for (AbstractTeam team : teams) {
+            if (team.getName().equals(name)) {
+                return team;
+            }
+        }
+        return null;
     }
     
     public void addTeam(AbstractTeam team) {

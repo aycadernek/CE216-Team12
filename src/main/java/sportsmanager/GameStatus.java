@@ -9,12 +9,14 @@ public class GameStatus {
     private ISport currentSport;
     private AbstractLeague currentLeague;
     private String status;
+    private String userTeamName;
 
     public GameStatus() {
             this.username = "";
             this.currentSport = null;
             this.currentLeague = null;
             this.status = NOT_STARTED;
+            this.userTeamName = null;
         }
 
     public String getUsername() {
@@ -43,6 +45,14 @@ public class GameStatus {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getUserTeamName() {
+        return userTeamName;
+    }
+
+    public void setUserTeamName(String userTeamName) {
+        this.userTeamName = userTeamName;
     }
 
     public int getCurrentWeek() {

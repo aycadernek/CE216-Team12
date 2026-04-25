@@ -1,11 +1,19 @@
 package sportsmanager;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({ @JsonSubTypes.Type(value = FootballPlayer.class, name = "FootballPlayer") })
 public abstract class AbstractPlayer {
 
     private String name;
     private String position;
     private boolean isInjured;
     private int injuryRemainingDuration;
+
+    protected AbstractPlayer() {
+    }
 
     public AbstractPlayer(String name, String position) {
         setName(name);

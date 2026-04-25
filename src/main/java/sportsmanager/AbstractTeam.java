@@ -1,8 +1,15 @@
 package sportsmanager;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({ @JsonSubTypes.Type(value = FootballTeam.class, name = "FootballTeam") })
 public abstract class AbstractTeam {
 
     private String name;
@@ -14,6 +21,9 @@ public abstract class AbstractTeam {
     private int winCount;
     private int lossCount;
     private int drawCount;
+
+    protected AbstractTeam() {
+    }
 
     public AbstractTeam(String name, String coach, String tactic) {
         this.name = name;

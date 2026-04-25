@@ -37,3 +37,5 @@ bin/
 .project
 .classpath
 .settings/
+
+game_status.json

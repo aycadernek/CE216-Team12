@@ -12,6 +12,9 @@ public class FootballTeam extends AbstractTeam {
             "4-4-2", "4-3-3", "3-5-2", "5-3-2", "4-2-3-1"
     );
 
+    public FootballTeam() {
+    }
+
     public FootballTeam(String name, String coach, String initialTactic) {
         super(name, coach, initialTactic);
         validateTactic(initialTactic);

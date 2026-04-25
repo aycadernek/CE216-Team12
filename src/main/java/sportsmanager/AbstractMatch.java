@@ -1,8 +1,12 @@
 package sportsmanager;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.List;
 import java.util.ArrayList;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({ @JsonSubTypes.Type(value = FootballMatch.class, name = "FootballMatch") })
 public abstract class AbstractMatch {
     private AbstractTeam team1;
     private AbstractTeam team2;
@@ -13,6 +17,9 @@ public abstract class AbstractMatch {
     private int currentPeriod;
     private boolean isFinished;
     private List<String> events;
+
+    protected AbstractMatch() {
+    }
 
     public AbstractMatch(AbstractTeam team1, AbstractTeam team2, int totalPeriods) {
         if (team1 == null || team2 == null) {

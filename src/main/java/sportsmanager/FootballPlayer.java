@@ -7,6 +7,9 @@ public class FootballPlayer extends AbstractPlayer {
     private int yellowCards;
     private int redCards;
 
+    public FootballPlayer() {
+    }
+
     public FootballPlayer(String name, String position) {
         super(name, position);
         this.goals = 0;

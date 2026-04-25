@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 public class FootballLeague extends AbstractLeague {
 
+    public FootballLeague() {
+    }
+    
     public FootballLeague(String leagueName) {
         super(leagueName, new Football());
     }

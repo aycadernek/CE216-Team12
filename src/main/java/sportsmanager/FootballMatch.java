@@ -1,5 +1,6 @@
 package sportsmanager;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -9,9 +10,15 @@ import java.util.Random;
 
 public class FootballMatch extends AbstractMatch {
 
+    @JsonIgnore
     private Random random;
     private Queue<Integer> plannedEventMinutes;
 
+    public FootballMatch() {
+        this.random = new Random();
+        this.plannedEventMinutes = new LinkedList<>();
+    }
+    
     public FootballMatch(AbstractTeam team1, AbstractTeam team2) {
         super(team1, team2, 2); 
         this.random = new Random();
