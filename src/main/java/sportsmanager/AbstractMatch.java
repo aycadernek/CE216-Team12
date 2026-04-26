@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-@JsonSubTypes({ @JsonSubTypes.Type(value = FootballMatch.class, name = "FootballMatch") })
+@JsonSubTypes({ 
+    @JsonSubTypes.Type(value = FootballMatch.class, name = "FootballMatch"),
+    @JsonSubTypes.Type(value = HandballMatch.class, name = "HandballMatch")
+ })
 public abstract class AbstractMatch {
     private AbstractTeam team1;
     private AbstractTeam team2;

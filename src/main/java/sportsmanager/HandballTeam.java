@@ -5,10 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HandballTeam extends AbstractTeam {
-    private static final int MAX_ROSTER_SIZE = 7;
+    private static final int MAX_ROSTER_SIZE = 14;
     private static final int PLAYERS_ON_FIELD = 7;
 
     private static final List<String> VALID_TACTICS = Arrays.asList("6-0", "5-1", "4-2", "3-2-1", "3-3");
+    private int matchYellowCards = 0;
 
     public HandballTeam() {
     }
@@ -24,6 +25,17 @@ public class HandballTeam extends AbstractTeam {
                     "Invalid handball tactic: " + tactic + ". Allowed tactics: " + VALID_TACTICS
             );
         }
+    }
+    public int getMatchYellowCards() {
+        return matchYellowCards;
+    }
+
+    public void addMatchYellowCard() {
+        this.matchYellowCards++;
+    }
+
+    public void resetMatchStats() {
+        this.matchYellowCards = 0;
     }
 
     @Override
