@@ -1,0 +1,7 @@
+Goalkeeper
+Left Wing
+Right Wing
+Left Back
+Right Back
+Center Back
+Pivot

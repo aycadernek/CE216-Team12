@@ -1,0 +1,10 @@
+Goalkeeper
+Center Back
+Left Back
+Right Back
+Defensive Midfielder
+Central Midfielder
+Attacking Midfielder
+Left Winger
+Right Winger
+Striker
