@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="700.0" prefWidth="600.0" style="-fx-background-color: #0c9aa6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sportsmanager.MainTabsLayoutController">
+    
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+   
+    <BorderPane style="-fx-background-color: #139bb9; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 0 0 2 0;">
+        <left>
+            <Label fx:id="teamNameLabel" style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+        </left>
+        <right>
+            <VBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                <Label fx:id="sportTypeLabel" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+                <Label fx:id="weekLabel" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+            </VBox>
+        </right>
+    </BorderPane>
+
+    
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" style="-fx-tab-min-height: 60px; -fx-tab-min-width: 221px;">
+        
+        <Tab fx:id="scheduleTab" text="Match Schedule">
+            <ScrollPane fitToWidth="true" style="-fx-background: #0c9aa6; -fx-border-color: transparent;">
+                <VBox fx:id="scheduleContainer" style="-fx-background-color: #0c9aa6;"/>
+            </ScrollPane>
+        </Tab>
+        
+        <Tab fx:id="teamTab" text="Team Information">
+            <ScrollPane fitToWidth="true" style="-fx-background: #0c9aa6; -fx-border-color: transparent;">
+                <VBox fx:id="teamContainer" style="-fx-background-color: #0c9aa6;"/>
+            </ScrollPane>
+        </Tab>
+        
+        <Tab fx:id="leagueTab" text="League">
+             <ScrollPane fitToWidth="true" style="-fx-background: #0c9aa6; -fx-border-color: transparent;">
+                 <VBox fx:id="leagueContainer" style="-fx-background-color: #0c9aa6;"/>
+             </ScrollPane>
+        </Tab>
+    </TabPane>
+
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #d8eef3; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 3 0 0 0;">
+        <Label fx:id="nextMatchInfoLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="saveAndExitButton" text="Save and Exit" style="-fx-background-color: #5b9157; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+        <Button fx:id="startMatchButton" text="START ➔" style="-fx-background-color: #234d20; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+    </HBox>
+
+</VBox>

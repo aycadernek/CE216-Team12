@@ -1,0 +1,105 @@
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #d8eef3;
+    -fx-border-color: black;
+    -fx-border-width: 0 1 2 0;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 5 20 5 20;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #6ee3e6;
+    -fx-border-width: 2 1 0 1;
+}
+
+.tab .tab-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.table-view {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: black;
+    -fx-border-width: 0 1 0 0;
+}
+
+.table-view .table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0 1 1 0;
+    -fx-text-fill: black;
+}
+
+.table-row-cell {
+    -fx-background-color: #0c9aa6;
+}
+
+.table-row-cell:empty {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.table-view .filler, .table-view .column-header-background .show-hide-columns-button {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+}
+
+#tacticsTable .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-padding: 0;
+    visibility: hidden;
+}
+
+#tacticsTable .table-cell {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: black;
+}
+
+#tacticsTable .table-row-cell:empty .table-cell {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+#tacticsTable {
+    -fx-border-color: black;
+    -fx-border-width: 1;  
+}
+#tacticsTable .viewport {
+    -fx-background-color: transparent;
+}
+
+#tacticsTable .table-row-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}

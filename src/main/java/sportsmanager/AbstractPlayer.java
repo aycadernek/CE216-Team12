@@ -78,4 +78,19 @@ public abstract class AbstractPlayer {
         this.isInjured = true;
         this.injuryRemainingDuration = duration;
     }
+    public abstract java.util.Map<String, String> getSpecificStats();
+    public java.util.Map<String, String> getAllInfo() {
+        java.util.Map<String, String> info = new java.util.LinkedHashMap<>();
+        
+        info.put("Name", getName());
+        info.put("Position", getPosition());
+        info.put("Injury Status", isInjured() ? "INJURED" : "Healthy");
+        if (isInjured()) {
+            info.put("Returns in", getInjuryRemainingDuration() + " matches");
+        }
+        
+        info.putAll(getSpecificStats()); 
+        
+        return info;
+    }
 }

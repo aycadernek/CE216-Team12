@@ -121,4 +121,15 @@ public class HandballPlayer extends AbstractPlayer {
 
         );
     }
+    @Override
+    public java.util.Map<String, String> getSpecificStats() {
+        java.util.Map<String, String> stats = new java.util.LinkedHashMap<>();
+        stats.put("Goals", String.valueOf(goals));
+        stats.put("Assists", String.valueOf(assists));
+        stats.put("Saves", String.valueOf(saves));
+        stats.put("2-Min Suspensions", String.valueOf(suspensions));
+        stats.put("Yellow Cards", String.valueOf(yellowCards));
+        stats.put("Red Cards", String.valueOf(redCards));
+        return stats;
+    }
 }

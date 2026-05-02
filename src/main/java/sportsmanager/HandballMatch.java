@@ -103,7 +103,7 @@ public class HandballMatch extends AbstractMatch {
         if (scorer == null) return;
 
         incrementScore(team);
-        //if (!scorer.isInjured()) scorer.scoreGoal(); //This part will be opened after HandballPlayer is implemented.
+        if (!scorer.isInjured()) scorer.scoreGoal();
         getEvents().add(timeStr + ": GOAL! " + team.getName() + " (" + scorer.getName() + ")");
     }
 
@@ -112,7 +112,7 @@ public class HandballMatch extends AbstractMatch {
         if (scorer == null) return;
 
         incrementScore(team);
-        //if (!scorer.isInjured()) scorer.scoreGoal(); //This part will be opened after HandballPlayer is implemented.
+        if (!scorer.isInjured()) scorer.scoreGoal(); 
         getEvents().add(timeStr + ": FAST BREAK GOAL! " + team.getName() + " (" + scorer.getName() + ")");
     }
 
@@ -122,7 +122,7 @@ public class HandballMatch extends AbstractMatch {
 
         if (random.nextInt(100) < 80) {
             incrementScore(team);
-            //if (!scorer.isInjured()) scorer.scoreGoal();//This part will be opened after HandballPlayer is implemented.
+            if (!scorer.isInjured()) scorer.scoreGoal();
             getEvents().add(timeStr + ": 7-METER GOAL! " + team.getName() + " (" + scorer.getName() + ")");
         } else {
             getEvents().add(timeStr + ": 7-METER MISSED! " + scorer.getName() + " loses the ball.");
@@ -146,11 +146,11 @@ public class HandballMatch extends AbstractMatch {
     private void handleYellowCard(HandballTeam team, String timeStr) {
         HandballPlayer player = getRandomPlayer(team);
         if (player == null) return;
-        if (/*player.getYellowCards() >= 1 || */ team.getMatchYellowCards() >= 3) { //This part will be opened after HandballPlayer is implemented.
+        if (player.getYellowCards() >= 1 ||team.getMatchYellowCards() >= 3) { 
             getEvents().add(timeStr + ": YELLOW CARD QUOTA FULL! Direct 2-minute suspension.");   
             handle2MinuteSuspensionHandle(team, player, timeStr);
         } else {
-            //player.receiveYellowCard(); //This part will be opened after HandballPlayer is implemented.
+            player.receiveYellowCard(); 
             team.addMatchYellowCard();
             getEvents().add(timeStr + ": YELLOW CARD - " + player.getName() + " receives a warning. (" + team.getName() + " Total Yellows: " + team.getMatchYellowCards() + "/3)");
         }
@@ -163,13 +163,12 @@ public class HandballMatch extends AbstractMatch {
     }
     
     private void handle2MinuteSuspensionHandle(HandballTeam team, HandballPlayer suspended, String timeStr) {
-        //This part will be opened after HandballPlayer is implemented.
-        /*suspended.receiveTwoMinuteSuspension(); 
+        suspended.receiveTwoMinuteSuspension(); 
         if (suspended.getTwoMinuteSuspensions() >= 3) {  
             removePlayerFromPitch(team, suspended, timeStr, "DISQUALIFICATION");
         } else {
             getEvents().add(timeStr + ": 2-MINUTE SUSPENSION! " + suspended.getName() + " is sent to the bench. " + team.getName());
-        }*/
+        }
     }
 
     private void handleRedCard(HandballTeam team, String timeStr) {

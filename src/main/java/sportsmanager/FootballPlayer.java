@@ -75,4 +75,13 @@ public class FootballPlayer extends AbstractPlayer {
         return String.format("FootballPlayer{name='%s', position='%s', goals=%d, assists=%d, injured=%b}",
                 getName(), getPosition(), goals, assists, isInjured());
     }
+    @Override
+    public java.util.Map<String, String> getSpecificStats() {
+        java.util.Map<String, String> stats = new java.util.LinkedHashMap<>();
+        stats.put("Goals", String.valueOf(goals));
+        stats.put("Assists", String.valueOf(assists));
+        stats.put("Yellow Cards", String.valueOf(yellowCards));
+        stats.put("Red Cards", String.valueOf(redCards));
+        return stats;
+    }
 }
