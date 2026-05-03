@@ -1,4 +1,7 @@
 package sportsmanager;
+import java.io.IOException;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
-import java.io.IOException;
-import java.util.List;
 
 public class MainTabsLayoutController {
 
