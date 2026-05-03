@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="750.0" prefWidth="800.0"
+      spacing="20"
+      style="-fx-background-color: #0c9aa6; -fx-padding: 20;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sportsmanager.GameScreenController">
+
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+
+    <BorderPane style="-fx-background-color: #139bb9; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 2;">
+        <left>
+            <Label text="MATCH SCREEN"
+                   style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;" />
+        </left>
+        <right>
+            <Label fx:id="periodLabel"
+                   text="Period: 0"
+                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+        </right>
+    </BorderPane>
+
+    <VBox alignment="CENTER" spacing="10">
+        <Label fx:id="matchTitleLabel"
+               text="Home Team vs Away Team"
+               style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <Label fx:id="scoreLabel"
+               text="0 - 0"
+               style="-fx-text-fill: white; -fx-font-size: 42px; -fx-font-weight: bold;" />
+
+        <Label fx:id="resultLabel"
+               text=""
+               style="-fx-text-fill: #ffef99; -fx-font-size: 20px; -fx-font-weight: bold;" />
+    </VBox>
+
+    <VBox spacing="8" VBox.vgrow="ALWAYS">
+        <Label text="Match Events"
+               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <TextArea fx:id="eventsTextArea"
+                  editable="false"
+                  wrapText="true"
+                  VBox.vgrow="ALWAYS"
+                  style="-fx-font-size: 14px;" />
+    </VBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="15"
+          style="-fx-background-color: #d8eef3; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 2;">
+        <Button fx:id="backButton"
+                text="← Back"
+                style="-fx-background-color: #5b9157; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Button fx:id="playPeriodButton"
+                text="PLAY PERIOD"
+                style="-fx-background-color: #234d20; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+    </HBox>
+
+</VBox>
