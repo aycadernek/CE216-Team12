@@ -33,6 +33,8 @@ public class MainTabsLayoutController {
     private GameStatus gameStatus;
 
     private TeamScreenController teamScreenController;
+    private LeagueScreenController leagueScreenController;
+    private ScheduleScreenController scheduleScreenController;
 
     @FXML
     public void initialize() {
@@ -59,6 +61,8 @@ public class MainTabsLayoutController {
         this.gameStatus = gameStatus; 
         updateHeader();
         loadTeamScreen();
+        loadLeagueScreen();
+        loadScheduleScreen();
         updateNextMatch();
     }
 
@@ -91,6 +95,38 @@ public class MainTabsLayoutController {
             
             teamContainer.getChildren().clear();
             teamContainer.getChildren().add(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLeagueScreen() {
+        try {
+            if (gameStatus == null) return;
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/LeagueScreen.fxml"));
+            Parent root = loader.load();
+            leagueScreenController = loader.getController();
+            leagueScreenController.updateUI(gameStatus);
+
+            leagueContainer.getChildren().clear();
+            leagueContainer.getChildren().add(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadScheduleScreen() {
+        try {
+            if (gameStatus == null) return;
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/ScheduleScreen.fxml"));
+            Parent root = loader.load();
+            scheduleScreenController = loader.getController();
+            scheduleScreenController.updateUI(gameStatus);
+
+            scheduleContainer.getChildren().clear();
+            scheduleContainer.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
