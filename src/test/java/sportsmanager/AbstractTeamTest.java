@@ -1,8 +1,11 @@
 package sportsmanager;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class AbstractTeamTest {
 
@@ -26,10 +29,15 @@ public class AbstractTeamTest {
 
     // create a dummy player
     private static class DummyPlayer extends AbstractPlayer {
-        public DummyPlayer(String name, String position) {
-            super(name, position);
-        }
+    public DummyPlayer(String name, String position) {
+        super(name, position);
     }
+
+    @Override
+    public java.util.Map<String, String> getSpecificStats() {
+        return new java.util.LinkedHashMap<>();
+    }
+}
 
     private DummyTeam team;
 
