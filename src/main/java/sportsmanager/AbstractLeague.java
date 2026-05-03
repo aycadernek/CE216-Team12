@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 @JsonSubTypes({ @JsonSubTypes.Type(value = FootballLeague.class, name = "FootballLeague") })
+@JsonSubTypes.Type(value = HandballLeague.class, name = "HandballLeague")
 public abstract class AbstractLeague {
     private String leagueName;
     private ISport sportType;

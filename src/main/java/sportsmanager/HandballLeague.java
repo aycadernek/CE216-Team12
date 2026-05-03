@@ -41,7 +41,7 @@ public class HandballLeague extends AbstractLeague {
                     }
                 }
 
-                getWeeklyFixtures().put(currentWeekIndex, weeklyMatches);
+                addWeeklyFixture(currentWeekIndex, weeklyMatches);
                 currentWeekIndex++;
 
                 AbstractTeam lastTeam = tempTeams.remove(tempTeams.size() - 1);
@@ -68,7 +68,7 @@ public class HandballLeague extends AbstractLeague {
                     }
                     match.setFinished(true);
                     updateTeamStats(match);
-                    getCompletedMatches().add(match);
+                    addCompletedMatch(match);
                 }
             }
 
@@ -144,22 +144,6 @@ public class HandballLeague extends AbstractLeague {
 
             return t1.getName().compareTo(t2.getName());
         });
-    }
-
-    private int compareHeadToHead(AbstractTeam t1, AbstractTeam t2) {
-        int t1Wins = 0;
-        int t2Wins = 0;
-
-        for (AbstractMatch match : getCompletedMatches()) {
-            if (match.getTeam1().equals(t1) && match.getTeam2().equals(t2)) {
-                if (match.getTeam1Score() > match.getTeam2Score()) t1Wins++;
-                else if (match.getTeam2Score() > match.getTeam1Score()) t2Wins++;
-            } else if (match.getTeam1().equals(t2) && match.getTeam2().equals(t1)) {
-                if (match.getTeam1Score() > match.getTeam2Score()) t2Wins++;
-                else if (match.getTeam2Score() > match.getTeam1Score()) t1Wins++;
-            }
-        }
-        return Integer.compare(t2Wins, t1Wins);
     }
 
     public int getGoalDifference(AbstractTeam team) {
