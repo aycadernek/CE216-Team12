@@ -42,6 +42,16 @@ public class MainTabsLayoutController {
                 }
                 App.showMainScreen();
             });
+
+        startMatchButton.setOnAction(e -> {
+
+        if (this.gameStatus != null) {
+
+            App.showGameScreen(this.gameStatus);
+
+        }
+
+    });    
     }
 
     public void setGameData(GameStatus gameStatus) {

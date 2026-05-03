@@ -63,6 +63,25 @@ public class App extends Application {
         }
     }
 
+    public static void showGameScreen(GameStatus gameStatus) {
+    try {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("/layouts/GameScreen.fxml"));
+        Parent root = loader.load();
+
+        GameScreenController controller = loader.getController();
+        controller.setGameData(gameStatus);
+
+        Scene scene = new Scene(root, 800, 750);
+        primaryStage.setTitle("Sports Manager - Match");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
     public static void main(String[] args) {
         launch(args);
     }
