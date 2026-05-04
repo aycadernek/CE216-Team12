@@ -16,6 +16,7 @@ public class GameScreenController {
     @FXML private Label resultLabel;
     @FXML private TextArea eventsTextArea;
     @FXML private Button playPeriodButton;
+    @FXML private Button finishWeekButton;
     @FXML private Button backButton;
 
     private GameStatus gameStatus;
@@ -24,6 +25,7 @@ public class GameScreenController {
     @FXML
     public void initialize() {
         playPeriodButton.setOnAction(event -> handlePlayPeriod());
+        finishWeekButton.setOnAction(event -> handleFinishWeek());
         backButton.setOnAction(event -> App.showMainTabs(gameStatus));
     }
 
@@ -97,6 +99,26 @@ public class GameScreenController {
         }
     }
 
+    private void handleFinishWeek() {
+
+        if (gameStatus == null || gameStatus.getCurrentLeague() == null) {
+
+            showInfoPopup("Error", "No active league was found.");
+
+            return;
+
+        }
+
+        AbstractLeague league = gameStatus.getCurrentLeague();
+
+        league.playWeeklyMatch();
+
+        showInfoPopup("Week Finished", "The current week has been completed.");
+
+        App.showMainTabs(gameStatus);
+
+    }
+
     private void updateUI() {
         if (currentMatch == null) {
             return;
@@ -118,9 +140,15 @@ public class GameScreenController {
             resultLabel.setText("Result: " + currentMatch.getResult());
             playPeriodButton.setText("MATCH FINISHED");
             playPeriodButton.setDisable(true);
+
+            finishWeekButton.setVisible(true);
+            finishWeekButton.setManaged(true);
         } else {
             resultLabel.setText("");
             playPeriodButton.setDisable(false);
+
+            finishWeekButton.setVisible(false);
+            finishWeekButton.setManaged(false);
 
             if (currentMatch.getCurrentPeriod() == 0) {
                 playPeriodButton.setText("PLAY FIRST HALF");
@@ -129,7 +157,7 @@ public class GameScreenController {
             } else {
                 playPeriodButton.setText("PLAY PERIOD");
             }
-        }    
+        }   
 }
 
     private void appendEvents() {

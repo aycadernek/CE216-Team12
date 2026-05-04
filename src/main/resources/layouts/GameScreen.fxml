@@ -58,7 +58,8 @@
     </VBox>
 
     <HBox alignment="CENTER_LEFT" spacing="15"
-          style="-fx-background-color: #d8eef3; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 2;">
+        style="-fx-background-color: #d8eef3; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 2;">
+
         <Button fx:id="backButton"
                 text="← Back"
                 style="-fx-background-color: #5b9157; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
@@ -68,6 +69,13 @@
         <Button fx:id="playPeriodButton"
                 text="PLAY PERIOD"
                 style="-fx-background-color: #234d20; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+
+        <Button fx:id="finishWeekButton"
+                text="FINISH WEEK"
+                visible="false"
+                managed="false"
+                style="-fx-background-color: #d4911f; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
+
     </HBox>
 
 </VBox>
