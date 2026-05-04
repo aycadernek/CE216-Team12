@@ -63,6 +63,25 @@ public class App extends Application {
         }
     }
 
+    public static void showMainTabs(GameStatus gameStatus) {
+    try {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("/layouts/MainTabsLayout.fxml"));
+        Parent root = loader.load();
+
+        MainTabsLayoutController controller = loader.getController();
+        controller.setGameData(gameStatus);
+
+        Scene scene = new Scene(root, 800, 750);
+        primaryStage.setTitle("Sports Manager");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
     public static void showGameScreen(GameStatus gameStatus) {
     try {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/layouts/GameScreen.fxml"));

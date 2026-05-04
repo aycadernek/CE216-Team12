@@ -24,7 +24,7 @@ public class GameScreenController {
     @FXML
     public void initialize() {
         playPeriodButton.setOnAction(event -> handlePlayPeriod());
-        backButton.setOnAction(event -> App.showMainTabs());
+        backButton.setOnAction(event -> App.showMainTabs(gameStatus));
     }
 
     public void setGameData(GameStatus gameStatus) {
