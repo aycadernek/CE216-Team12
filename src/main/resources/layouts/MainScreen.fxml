@@ -1,17 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="750.0" prefWidth="800.0" spacing="40.0" style="-fx-background-color: #0c9aa6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sportsmanager.MainScreenController">
+<VBox alignment="CENTER"
+
+      prefHeight="750.0"
+
+      prefWidth="800.0"
+
+      spacing="25.0"
+
+      style="-fx-background-color: #0c9aa6;"
+
+      xmlns="http://javafx.com/javafx/17"
+
+      xmlns:fx="http://javafx.com/fxml/1"
+
+      fx:controller="sportsmanager.MainScreenController">
+
    <children>
+
       <Label text="SPORTS MANAGER" textFill="WHITE">
+
          <font>
+
             <Font name="System Bold" size="48.0" />
+
          </font>
+
       </Label>
-      <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStartGame" prefHeight="60.0" prefWidth="250.0" style="-fx-background-color: #234d20; -fx-background-radius: 30; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-cursor: hand;" text="START GAME" />
+
+      <TextField fx:id="usernameField"
+
+                 promptText="Enter manager name"
+
+                 maxWidth="300.0"
+
+                 style="-fx-font-size: 18px; -fx-background-radius: 20; -fx-padding: 10;" />
+
+      <ComboBox fx:id="sportComboBox"
+
+                promptText="Choose Sport"
+
+                maxWidth="300.0"
+
+                style="-fx-font-size: 18px;" />
+
+      <Button fx:id="startButton"
+
+              mnemonicParsing="false"
+
+              onAction="#handleStartGame"
+
+              prefHeight="60.0"
+
+              prefWidth="250.0"
+
+              style="-fx-background-color: #234d20; -fx-background-radius: 30; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-cursor: hand;"
+
+              text="START GAME" />
+
+      <Button fx:id="loadButton"
+
+              mnemonicParsing="false"
+
+              onAction="#handleLoadGame"
+
+              prefHeight="45.0"
+
+              prefWidth="220.0"
+
+              style="-fx-background-color: #5b9157; -fx-background-radius: 25; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand;"
+
+              text="LOAD GAME" />
+
+      <Button fx:id="exitButton"
+
+              mnemonicParsing="false"
+
+              onAction="#handleExit"
+
+              prefHeight="45.0"
+
+              prefWidth="220.0"
+
+              style="-fx-background-color: #8b2d2d; -fx-background-radius: 25; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand;"
+
+              text="EXIT" />
+
    </children>
+
 </VBox>

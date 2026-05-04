@@ -41,6 +41,7 @@ public class GameScreenController {
         }
 
         updateUI();
+        eventsTextArea.setText("Match is ready. Click PLAY FIRST HALF to begin.\n");
     }
 
     private AbstractMatch findUserTeamMatch() {
@@ -74,12 +75,15 @@ public class GameScreenController {
 
     private void handlePlayPeriod() {
         if (currentMatch == null) {
-            showInfoPopup("No Match", "There is no match available to play.");
+            showInfoPopup("Full Time",
+                currentMatch.getTeam1().getName() + " " + currentMatch.getTeam1Score()
+                    + " - " + currentMatch.getTeam2Score() + " " + currentMatch.getTeam2().getName()
+                        + "\nResult: " + currentMatch.getResult());
             return;
         }
 
         if (currentMatch.isFinished()) {
-            showInfoPopup("Match Finished", "This match has already finished.");
+            showInfoPopup("Match Finished", "This match has already finished.\nResult: " + currentMatch.getResult());
             return;
         }
 
@@ -112,12 +116,21 @@ public class GameScreenController {
 
         if (currentMatch.isFinished()) {
             resultLabel.setText("Result: " + currentMatch.getResult());
+            playPeriodButton.setText("MATCH FINISHED");
             playPeriodButton.setDisable(true);
         } else {
             resultLabel.setText("");
             playPeriodButton.setDisable(false);
-        }
-    }
+
+            if (currentMatch.getCurrentPeriod() == 0) {
+                playPeriodButton.setText("PLAY FIRST HALF");
+            } else if (currentMatch.getCurrentPeriod() == 1) {
+                playPeriodButton.setText("PLAY SECOND HALF");
+            } else {
+                playPeriodButton.setText("PLAY PERIOD");
+            }
+        }    
+}
 
     private void appendEvents() {
         if (currentMatch == null) {
