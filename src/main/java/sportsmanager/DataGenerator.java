@@ -13,14 +13,26 @@ public class DataGenerator {
 
     private static final Random random = new Random();
 
-    private static final List<String> PLAYER_NAMES =
-            loadLines("/data/player_names.txt");
+    private static final List<String> PLAYER_NAMES_MALE = loadLinesSafely("/data/player_names_male.txt");
+    private static final List<String> PLAYER_NAMES_FEMALE = loadLinesSafely("/data/player_names_female.txt");
 
     private static final List<String> COACH_NAMES =
             loadLines("/data/coach_names.txt");
 
     private static final List<String> TEAM_NAMES =
             loadLines("/data/team_names.txt");
+
+    private static final List<String> PLAYER_PHOTOS_MALE = loadLinesSafely("/data/player_photos_male.txt");
+    private static final List<String> PLAYER_PHOTOS_FEMALE = loadLinesSafely("/data/player_photos_female.txt");
+
+    private static List<String> loadLinesSafely(String path) {
+        try {
+            return loadLines(path);
+        } catch (Exception e) {
+            System.out.println("Warning: " + path + " not found. List will be empty.");
+            return new ArrayList<>();
+        }
+    }
 
     private static final List<String> FOOTBALL_POSITIONS =
             loadLines("/data/football_positions.txt");
@@ -67,7 +79,8 @@ public class DataGenerator {
     }
 
     public static String generatePlayerName() {
-        return getRandomItem(PLAYER_NAMES);
+        List<String> pool = random.nextInt(2) == 0 ? PLAYER_NAMES_MALE : PLAYER_NAMES_FEMALE;
+        return pool.isEmpty() ? "Player " + random.nextInt(1000) : getRandomItem(pool);
     }
 
     public static String generateCoachName() {
@@ -86,21 +99,56 @@ public class DataGenerator {
         return getRandomItem(HANDBALL_POSITIONS);
     }
 
+    public static String generatePlayerPhoto() {
+        List<String> pool = random.nextInt(2) == 0 ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+        return pool.isEmpty() ? "" : getRandomItem(pool);
+    }
+
     public static FootballPlayer generateFootballPlayer() {
-        return new FootballPlayer(generatePlayerName(), generateFootballPosition());
+        int gender = random.nextInt(2);  
+        List<String> names = (gender == 0) ? PLAYER_NAMES_MALE : PLAYER_NAMES_FEMALE;
+        List<String> photos = (gender == 0) ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+        
+        String name = names.isEmpty() ? "Player " + random.nextInt(1000) : getRandomItem(names);
+        String photo = photos.isEmpty() ? "" : getRandomItem(photos);
+        
+        FootballPlayer player = new FootballPlayer(name, generateFootballPosition());
+        player.setPhotoPath(photo);
+        return player;
     }
 
     public static HandballPlayer generateHandballPlayer() {
-        return new HandballPlayer(generatePlayerName(), generateHandballPosition());
+        int gender = random.nextInt(2);  
+        List<String> names = (gender == 0) ? PLAYER_NAMES_MALE : PLAYER_NAMES_FEMALE;
+        List<String> photos = (gender == 0) ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+        
+        String name = names.isEmpty() ? "Player " + random.nextInt(1000) : getRandomItem(names);
+        String photo = photos.isEmpty() ? "" : getRandomItem(photos);
+        
+        HandballPlayer player = new HandballPlayer(name, generateHandballPosition());
+        player.setPhotoPath(photo);
+        return player;
     }
 
     public static List<AbstractPlayer> generateFootballPlayers(int count) {
         List<AbstractPlayer> players = new ArrayList<>();
-        List<String> shuffledNames = new ArrayList<>(PLAYER_NAMES);
-        Collections.shuffle(shuffledNames, random);
+        List<String> maleNames = new ArrayList<>(PLAYER_NAMES_MALE);
+        List<String> femaleNames = new ArrayList<>(PLAYER_NAMES_FEMALE);
+        Collections.shuffle(maleNames, random);
+        Collections.shuffle(femaleNames, random);
 
-        for (int i = 0; i < count && i < shuffledNames.size(); i++) {
-            players.add(new FootballPlayer(shuffledNames.get(i), generateFootballPosition()));
+        for (int i = 0; i < count; i++) {
+            int gender = random.nextInt(2); 
+            List<String> photos = (gender == 0) ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+            
+            String name = (gender == 0) 
+                    ? (maleNames.isEmpty() ? "Player " + (i + 1) : maleNames.remove(0))
+                    : (femaleNames.isEmpty() ? "Player " + (i + 1) : femaleNames.remove(0));
+            String photo = photos.isEmpty() ? "" : getRandomItem(photos);
+
+            FootballPlayer player = new FootballPlayer(name, generateFootballPosition());
+            player.setPhotoPath(photo);
+            players.add(player);
         }
 
         return players;
@@ -108,11 +156,23 @@ public class DataGenerator {
 
     public static List<AbstractPlayer> generateHandballPlayers(int count) {
         List<AbstractPlayer> players = new ArrayList<>();
-        List<String> shuffledNames = new ArrayList<>(PLAYER_NAMES);
-        Collections.shuffle(shuffledNames, random);
+        List<String> maleNames = new ArrayList<>(PLAYER_NAMES_MALE);
+        List<String> femaleNames = new ArrayList<>(PLAYER_NAMES_FEMALE);
+        Collections.shuffle(maleNames, random);
+        Collections.shuffle(femaleNames, random);
 
-        for (int i = 0; i < count && i < shuffledNames.size(); i++) {
-            players.add(new HandballPlayer(shuffledNames.get(i), generateHandballPosition()));
+        for (int i = 0; i < count; i++) {
+            int gender = random.nextInt(2); 
+            List<String> photos = (gender == 0) ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+            
+            String name = (gender == 0) 
+                    ? (maleNames.isEmpty() ? "Player " + (i + 1) : maleNames.remove(0))
+                    : (femaleNames.isEmpty() ? "Player " + (i + 1) : femaleNames.remove(0));
+            String photo = photos.isEmpty() ? "" : getRandomItem(photos);
+
+            HandballPlayer player = new HandballPlayer(name, generateHandballPosition());
+            player.setPhotoPath(photo);
+            players.add(player);
         }
 
         return players;
@@ -191,7 +251,9 @@ public class DataGenerator {
     }
 
     public static List<String> getAvailablePlayerNames() {
-        return Collections.unmodifiableList(PLAYER_NAMES);
+        List<String> all = new ArrayList<>(PLAYER_NAMES_MALE);
+        all.addAll(PLAYER_NAMES_FEMALE);
+        return Collections.unmodifiableList(all);
     }
 
     public static List<String> getAvailableCoachNames() {

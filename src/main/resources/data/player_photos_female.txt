@@ -1,0 +1,5 @@
+/images/players/player_female_1.png
+/images/players/player_female_2.png
+/images/players/player_female_3.png
+/images/players/player_female_4.png
+/images/players/player_female_5.png

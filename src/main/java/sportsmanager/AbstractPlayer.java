@@ -12,6 +12,7 @@ public abstract class AbstractPlayer {
 
     private String name;
     private String position;
+    private String photoPath;
     private boolean isInjured;
     private int injuryRemainingDuration;
 
@@ -21,6 +22,7 @@ public abstract class AbstractPlayer {
     public AbstractPlayer(String name, String position) {
         setName(name);
         setPosition(position);
+        this.photoPath = "";
         this.isInjured = false;
         this.injuryRemainingDuration = 0;
     }
@@ -45,6 +47,14 @@ public abstract class AbstractPlayer {
             throw new IllegalArgumentException("Player position cannot be empty.");
         }
         this.position = position.trim();
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public boolean isInjured() {
@@ -96,6 +106,7 @@ public abstract class AbstractPlayer {
     public java.util.Map<String, String> getAllInfo() {
         java.util.Map<String, String> info = new java.util.LinkedHashMap<>();
         
+        info.put("Photo", getPhotoPath());
         info.put("Name", getName());
         info.put("Position", getPosition());
         info.put("Injury Status", isInjured() ? "INJURED" : "Healthy");

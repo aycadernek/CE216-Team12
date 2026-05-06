@@ -184,6 +184,27 @@ public class TeamScreenController {
         VBox content = new VBox(10);
         content.setStyle("-fx-background-color: #0c9aa6; -fx-padding: 20;");
         java.util.Map<String, String> allInfo = player.getAllInfo();
+        
+        String photoPath = allInfo.get("Photo");
+        if (photoPath != null && !photoPath.trim().isEmpty()) {
+            try {
+                java.io.InputStream imgStream = getClass().getResourceAsStream(photoPath);
+                if (imgStream != null) {
+                    javafx.scene.image.Image img = new javafx.scene.image.Image(imgStream);
+                    javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(img);
+                    imageView.setFitHeight(120);
+                    imageView.setFitWidth(120);
+                    imageView.setPreserveRatio(true);
+                    
+                    javafx.scene.layout.HBox imageBox = new javafx.scene.layout.HBox(imageView);
+                    imageBox.setAlignment(javafx.geometry.Pos.CENTER);
+                    content.getChildren().add(imageBox);
+                }
+            } catch (Exception e) {
+                System.out.println("Could not load image: " + photoPath);
+            }
+        }
+
         String statusStr = "Substitute";
         if (gameStatus != null) {
             AbstractLeague league = gameStatus.getCurrentLeague();
@@ -200,7 +221,7 @@ public class TeamScreenController {
         displayData.put("Match Status", statusStr); 
         
         for (java.util.Map.Entry<String, String> entry : allInfo.entrySet()) {
-            if (!entry.getKey().equals("Name") && !entry.getKey().equals("Position")) {
+            if (!entry.getKey().equals("Name") && !entry.getKey().equals("Position") && !entry.getKey().equals("Photo")) {
                 displayData.put(entry.getKey(), entry.getValue());
             }
         }

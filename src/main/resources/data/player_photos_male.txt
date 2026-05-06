@@ -1,0 +1,5 @@
+/images/players/player_male_1.png
+/images/players/player_male_2.png
+/images/players/player_male_3.png
+/images/players/player_male_4.png
+/images/players/player_male_5.png
