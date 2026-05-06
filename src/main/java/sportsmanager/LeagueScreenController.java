@@ -110,20 +110,53 @@ public class LeagueScreenController {
     }
 
     private void showEventsPopUp(AbstractMatch match, int week) {
-        Alert popUp = new Alert(Alert.AlertType.INFORMATION);
+        Alert popUp = new Alert(Alert.AlertType.NONE);
         popUp.setTitle("Match Events");
-        popUp.setHeaderText("Week " + week + ": " + match.getTeam1().getName() + " vs " + match.getTeam2().getName());
 
-        StringBuilder eventsList = new StringBuilder();
+        String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+        popUp.getDialogPane().getStylesheets().add(css);
+
+        ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        popUp.getButtonTypes().add(closeButton);
+
+        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(10);
+        content.setStyle("-fx-background-color: #0c9aa6; -fx-padding: 20;");
+
+        Label titleLabel = new Label("Week " + week + ": " + match.getTeam1().getName() + " vs " + match.getTeam2().getName());
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+        content.getChildren().add(titleLabel);
+
+        javafx.scene.layout.VBox eventsBox = new javafx.scene.layout.VBox(5);
+        eventsBox.setStyle("-fx-background-color: #0c9aa6;");
+
         if (match.getEvents().isEmpty()) {
-            eventsList.append("No events recorded for this match.");
+            Label emptyLabel = new Label("No events recorded for this match.");
+            emptyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-style: italic;");
+            eventsBox.getChildren().add(emptyLabel);
         } else {
             for (String event : match.getEvents()) {
-                eventsList.append(event).append("\n");
+                Label lbl = new Label(event);
+                lbl.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+                lbl.setWrapText(true);
+                eventsBox.getChildren().add(lbl);
             }
         }
 
-        popUp.setContentText(eventsList.toString());
+        ScrollPane scrollPane = new ScrollPane(eventsBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefSize(500, 350);
+        scrollPane.setStyle("-fx-background: #0c9aa6; -fx-control-inner-background: #0c9aa6; -fx-border-color: #139bb9; -fx-border-width: 2;");
+
+        content.getChildren().add(scrollPane);
+
+        popUp.getDialogPane().setContent(content);
+        popUp.getDialogPane().setStyle("-fx-background-color: #0c9aa6; -fx-border-color: #139bb9; -fx-border-width: 3;");
+
+        Button btn = (Button) popUp.getDialogPane().lookupButton(closeButton);
+        if (btn != null) {
+            btn.setStyle("-fx-background-color: #234d20; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;");
+        }
+
         popUp.showAndWait();
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -47,14 +48,46 @@ public class MainTabsLayoutController {
             });
 
         startMatchButton.setOnAction(e -> {
+            if (this.gameStatus == null) return;
+            AbstractLeague league = this.gameStatus.getCurrentLeague();
+            if (league == null) return;
+            AbstractTeam userTeam = league.getTeamByName(this.gameStatus.getUserTeamName());
+            if (userTeam == null) return;
 
-        if (this.gameStatus != null) {
+            if (this.gameStatus.isLeagueOver()) {
+                return;
+            }
 
-            App.showGameScreen(this.gameStatus);
+            boolean hasMatchThisWeek = false;
+            for (AbstractMatch match : league.getMatchesForWeek(league.getCurrentWeek())) {
+                if (match.getTeam1().equals(userTeam) || match.getTeam2().equals(userTeam)) {
+                    hasMatchThisWeek = true;
+                    break;
+                }
+            }
 
-        }
+            if (hasMatchThisWeek) {
+                if (!userTeam.isReadyToPlay()) {
+                    ISport sport = this.gameStatus.getCurrentSport();
+                    int requiredStarters = sport.getPlayerCount();
+                    int currentStarters = userTeam.getActivePlayers().size();
 
-    });    
+                    String message = "Your team is not ready to play! Please check your starting lineup.\n\n"
+                                   + "Required Starters: " + requiredStarters + "\n"
+                                   + "Current Starters: " + currentStarters;
+                    showAlert("Invalid Lineup", message);
+                    return;
+                }
+                App.showGameScreen(this.gameStatus);
+            } else {
+                league.playWeeklyMatch();
+                updateHeader();
+                updateNextMatch();
+                loadScheduleScreen();
+                loadLeagueScreen();
+                loadTeamScreen();
+            }
+        });    
     }
 
     public void setGameData(GameStatus gameStatus) {
@@ -136,16 +169,49 @@ public class MainTabsLayoutController {
         if (gameStatus != null) {
             AbstractLeague league = gameStatus.getCurrentLeague();
             AbstractTeam team = league.getTeamByName(gameStatus.getUserTeamName());
-            if (league == null || team == null) return;
+            if (league == null || team == null) {
+                nextMatchInfoLabel.setText("No upcoming match");
+                return;
+            }
+
+            if (gameStatus.isLeagueOver()) {
+                nextMatchInfoLabel.setText("League Finished");
+                startMatchButton.setDisable(true);
+                return;
+            } else {
+                startMatchButton.setDisable(false);
+            }
 
             List<AbstractMatch> matches = league.getMatchesForWeek(league.getCurrentWeek());
+            boolean hasMatch = false;
             for (AbstractMatch match : matches) {
                 if (match.getTeam1().equals(team) || match.getTeam2().equals(team)) {
                     nextMatchInfoLabel.setText("Next: " + match.getTeam1().getName() + " vs " + match.getTeam2().getName());
+                    startMatchButton.setText("Start Match");
+                    hasMatch = true;
                     return;
                 }
             }
+            
+            if (!hasMatch) {
+                nextMatchInfoLabel.setText("No match this week (BYE)");
+                startMatchButton.setText("Simulate Week");
+            }
+        } else {
+            nextMatchInfoLabel.setText("No upcoming match");
         }
-        nextMatchInfoLabel.setText("No upcoming match");
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            alert.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {}
+        alert.showAndWait();
     }
 }

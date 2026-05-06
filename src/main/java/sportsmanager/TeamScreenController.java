@@ -175,6 +175,9 @@ public class TeamScreenController {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Player Information");
         
+        String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+        alert.getDialogPane().getStylesheets().add(css);
+        
         ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().add(closeButton);
         

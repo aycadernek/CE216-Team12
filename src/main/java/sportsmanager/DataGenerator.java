@@ -96,9 +96,11 @@ public class DataGenerator {
 
     public static List<AbstractPlayer> generateFootballPlayers(int count) {
         List<AbstractPlayer> players = new ArrayList<>();
+        List<String> shuffledNames = new ArrayList<>(PLAYER_NAMES);
+        Collections.shuffle(shuffledNames, random);
 
-        for (int i = 0; i < count; i++) {
-            players.add(generateFootballPlayer());
+        for (int i = 0; i < count && i < shuffledNames.size(); i++) {
+            players.add(new FootballPlayer(shuffledNames.get(i), generateFootballPosition()));
         }
 
         return players;
@@ -106,17 +108,23 @@ public class DataGenerator {
 
     public static List<AbstractPlayer> generateHandballPlayers(int count) {
         List<AbstractPlayer> players = new ArrayList<>();
+        List<String> shuffledNames = new ArrayList<>(PLAYER_NAMES);
+        Collections.shuffle(shuffledNames, random);
 
-        for (int i = 0; i < count; i++) {
-            players.add(generateHandballPlayer());
+        for (int i = 0; i < count && i < shuffledNames.size(); i++) {
+            players.add(new HandballPlayer(shuffledNames.get(i), generateHandballPosition()));
         }
 
         return players;
     }
 
     public static FootballTeam generateFootballTeam() {
+        return generateFootballTeam(generateTeamName());
+    }
+
+    public static FootballTeam generateFootballTeam(String teamName) {
         FootballTeam team = new FootballTeam(
-                generateTeamName(),
+                teamName,
                 generateCoachName(),
                 "4-4-2"
         );
@@ -133,8 +141,12 @@ public class DataGenerator {
     }
 
     public static HandballTeam generateHandballTeam() {
+        return generateHandballTeam(generateTeamName());
+    }
+
+    public static HandballTeam generateHandballTeam(String teamName) {
         HandballTeam team = new HandballTeam(
-                generateTeamName(),
+                teamName,
                 generateCoachName(),
                 "6-0"
         );
@@ -152,9 +164,11 @@ public class DataGenerator {
 
     public static List<FootballTeam> generateFootballTeams(int teamCount) {
         List<FootballTeam> teams = new ArrayList<>();
+        List<String> shuffledNames = new ArrayList<>(TEAM_NAMES);
+        Collections.shuffle(shuffledNames, random);
 
-        for (int i = 0; i < teamCount; i++) {
-            teams.add(generateFootballTeam());
+        for (int i = 0; i < teamCount && i < shuffledNames.size(); i++) {
+            teams.add(generateFootballTeam(shuffledNames.get(i)));
         }
 
         return teams;
@@ -162,9 +176,11 @@ public class DataGenerator {
 
     public static List<HandballTeam> generateHandballTeams(int teamCount) {
         List<HandballTeam> teams = new ArrayList<>();
+        List<String> shuffledNames = new ArrayList<>(TEAM_NAMES);
+        Collections.shuffle(shuffledNames, random);
 
-        for (int i = 0; i < teamCount; i++) {
-            teams.add(generateHandballTeam());
+        for (int i = 0; i < teamCount && i < shuffledNames.size(); i++) {
+            teams.add(generateHandballTeam(shuffledNames.get(i)));
         }
 
         return teams;

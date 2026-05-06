@@ -116,6 +116,15 @@ public class MainScreenController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        
+       
+        alert.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            alert.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {}
+
         alert.showAndWait();
     }
 }

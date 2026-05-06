@@ -35,24 +35,6 @@ public class App extends Application {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("/layouts/MainTabsLayout.fxml"));
             Parent root = loader.load();
             
-            MainTabsLayoutController controller = loader.getController();
-            
-            // UI Test Data Added for Demo
-            FootballLeague league = new FootballLeague("Deneme Ligi");
-            FootballTeam team1 = DataGenerator.generateFootballTeam();
-            FootballTeam team2 = DataGenerator.generateFootballTeam();
-            team1.setDrawCount(2);
-            team1.setWinCount(4);
-            team1.setLossCount(4);
-            league.addTeam(team1);
-            league.addTeam(team2);
-            league.createLeague();
-            GameStatus gameStatus = new GameStatus();
-            gameStatus.startNewGame("Player1", new Football(), league);
-            gameStatus.setUserTeamName(team1.getName());
-            controller.setGameData(gameStatus);
-            // 
-
             Scene scene = new Scene(root, 800, 750);
             primaryStage.setTitle("Sports Manager");
             primaryStage.setScene(scene);

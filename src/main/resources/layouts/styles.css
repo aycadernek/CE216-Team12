@@ -108,3 +108,59 @@
     -fx-border-width: 0px;
     -fx-border-color: transparent;
 }
+
+.dialog-pane {
+    -fx-background-color: #0c9aa6;
+    -fx-border-color: #139bb9;
+    -fx-border-width: 3;
+    -fx-pref-width: 400;
+    -fx-max-width: 500;
+}
+
+.dialog-pane > .content {
+    -fx-padding: 20;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #087d87;
+    -fx-padding: 15;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #234d20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #2e662a;
+}
+
+.dialog-pane .button:cancel {
+    -fx-background-color: #d9534f;
+}
+
+.dialog-pane .button:cancel:hover {
+    -fx-background-color: #c9302c;
+}

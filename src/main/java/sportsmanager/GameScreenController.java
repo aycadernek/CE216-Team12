@@ -155,19 +155,52 @@ public class GameScreenController {
         ComboBox<AbstractTeam> teamComboBox = new ComboBox<>();
         teamComboBox.getItems().addAll(currentMatch.getTeam1(), currentMatch.getTeam2());
         teamComboBox.setValue(currentMatch.getTeam1());
+        teamComboBox.setConverter(new StringConverter<AbstractTeam>() {
+            @Override
+            public String toString(AbstractTeam team) {
+                return team == null ? "" : team.getName();
+            }
+
+            @Override
+            public AbstractTeam fromString(String string) {
+                return null;
+            }
+        });
 
         ComboBox<AbstractPlayer> outPlayerComboBox = new ComboBox<>();
+        outPlayerComboBox.setConverter(new StringConverter<AbstractPlayer>() {
+            @Override
+            public String toString(AbstractPlayer player) {
+                return player == null ? "" : player.getName() + " (" + player.getPosition() + ")";
+            }
+
+            @Override
+            public AbstractPlayer fromString(String string) {
+                return null;
+            }
+        });
+
         ComboBox<AbstractPlayer> inPlayerComboBox = new ComboBox<>();
+        inPlayerComboBox.setConverter(new StringConverter<AbstractPlayer>() {
+            @Override
+            public String toString(AbstractPlayer player) {
+                return player == null ? "" : player.getName() + " (" + player.getPosition() + ")";
+            }
+
+            @Override
+            public AbstractPlayer fromString(String string) {
+                return null;
+            }
+        });
 
         teamComboBox.setOnAction(event -> {
             AbstractTeam selectedTeam = teamComboBox.getValue();
             updateSubstitutionChoices(selectedTeam, outPlayerComboBox, inPlayerComboBox);
         });
 
-    updateSubstitutionChoices(teamComboBox.getValue(), outPlayerComboBox, inPlayerComboBox);
+        updateSubstitutionChoices(teamComboBox.getValue(), outPlayerComboBox, inPlayerComboBox);
 
         VBox content = new VBox(10);
-        content.setStyle("-fx-padding: 15;");
         content.getChildren().addAll(
                 new Label("Team:"),
                 teamComboBox,
@@ -177,7 +210,13 @@ public class GameScreenController {
                 inPlayerComboBox
     );
 
-    dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setContent(content);
+
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            dialog.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {
+        }
 
     dialog.setResultConverter(button -> {
         if (button == confirmButton) {
@@ -214,44 +253,7 @@ public class GameScreenController {
         return null;
     });
 
-    dialog.showAndWait();
-
-        teamComboBox.setConverter(new StringConverter<AbstractTeam>() {
-        @Override
-        public String toString(AbstractTeam team) {
-            return team == null ? "" : team.getName();
-        }
-
-        @Override
-        public AbstractTeam fromString(String string) {
-            return null;
-        }
-    });
-
-    outPlayerComboBox.setConverter(new StringConverter<AbstractPlayer>() {
-        @Override
-        public String toString(AbstractPlayer player) {
-            return player == null ? "" : player.getName() + " (" + player.getPosition() + ")";
-        }
-
-        @Override
-        public AbstractPlayer fromString(String string) {
-            return null;
-        }
-    });
-
-    inPlayerComboBox.setConverter(new StringConverter<AbstractPlayer>() {
-        @Override
-        public String toString(AbstractPlayer player) {
-            return player == null ? "" : player.getName() + " (" + player.getPosition() + ")";
-        }
-
-        @Override
-        public AbstractPlayer fromString(String string) {
-            return null;
-        }
-    });
-
+        dialog.showAndWait();
     }
 
         private void updateSubstitutionChoices(
@@ -344,6 +346,13 @@ public class GameScreenController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            alert.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {
+        }
+
         alert.showAndWait();
     }
 }
