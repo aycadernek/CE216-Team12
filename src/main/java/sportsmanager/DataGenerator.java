@@ -16,8 +16,8 @@ public class DataGenerator {
     private static final List<String> PLAYER_NAMES_MALE = loadLinesSafely("/data/player_names_male.txt");
     private static final List<String> PLAYER_NAMES_FEMALE = loadLinesSafely("/data/player_names_female.txt");
 
-    private static final List<String> COACH_NAMES =
-            loadLines("/data/coach_names.txt");
+    private static final List<String> COACH_NAMES_MALE = loadLinesSafely("/data/coach_names_male.txt");
+    private static final List<String> COACH_NAMES_FEMALE = loadLinesSafely("/data/coach_names_female.txt");
 
     private static final List<String> TEAM_NAMES =
             loadLines("/data/team_names.txt");
@@ -83,8 +83,9 @@ public class DataGenerator {
         return pool.isEmpty() ? "Player " + random.nextInt(1000) : getRandomItem(pool);
     }
 
-    public static String generateCoachName() {
-        return getRandomItem(COACH_NAMES);
+    public static String generateCoachName(int gender) {
+        List<String> pool = (gender == 0) ? COACH_NAMES_MALE : COACH_NAMES_FEMALE;
+        return pool.isEmpty() ? "Coach " + random.nextInt(1000) : getRandomItem(pool);
     }
 
     public static String generateTeamName() {
@@ -183,11 +184,13 @@ public class DataGenerator {
     }
 
     public static FootballTeam generateFootballTeam(String teamName) {
+        int gender = random.nextInt(2);  
         FootballTeam team = new FootballTeam(
                 teamName,
-                generateCoachName(),
+                generateCoachName(gender),
                 "4-4-2"
         );
+        team.setCoachPhotoPath(gender == 0 ? "/images/coaches/coach_male_1.png" : "/images/coaches/coach_female_1.png");
 
         List<AbstractPlayer> players = generateFootballPlayers(18);
 
@@ -205,11 +208,13 @@ public class DataGenerator {
     }
 
     public static HandballTeam generateHandballTeam(String teamName) {
+        int gender = random.nextInt(2); 
         HandballTeam team = new HandballTeam(
                 teamName,
-                generateCoachName(),
+                generateCoachName(gender),
                 "6-0"
         );
+        team.setCoachPhotoPath(gender == 0 ? "/images/coaches/coach_male_1.png" : "/images/coaches/coach_female_1.png");
 
         List<AbstractPlayer> players = generateHandballPlayers(14);
 
@@ -257,6 +262,8 @@ public class DataGenerator {
     }
 
     public static List<String> getAvailableCoachNames() {
-        return Collections.unmodifiableList(COACH_NAMES);
+        List<String> all = new ArrayList<>(COACH_NAMES_MALE);
+        all.addAll(COACH_NAMES_FEMALE);
+        return Collections.unmodifiableList(all);
     }
 }

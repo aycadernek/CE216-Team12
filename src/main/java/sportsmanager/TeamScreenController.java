@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import java.io.InputStream;
 
 
 public class TeamScreenController {
@@ -25,6 +28,9 @@ public class TeamScreenController {
     @FXML private Label winsLabel;
     @FXML private Label lossesLabel;
     @FXML private Label drawsLabel;
+
+    @FXML private ImageView coachImageView;
+    @FXML private Label coachNameLabel;
 
     private GameStatus gameStatus;
 
@@ -296,6 +302,21 @@ public class TeamScreenController {
         drawsLabel.setText(String.valueOf(team.getDrawCount()));
 
         updateTactics();
+
+        if (coachNameLabel != null) {
+            coachNameLabel.setText("Coach: " + team.getCoach());
+        }
+        
+        if (coachImageView != null && team.getCoachPhotoPath() != null && !team.getCoachPhotoPath().isEmpty()) {
+            try {
+                InputStream imgStream = getClass().getResourceAsStream(team.getCoachPhotoPath());
+                if (imgStream != null) {
+                    coachImageView.setImage(new Image(imgStream));
+                }
+            } catch (Exception e) {
+                System.out.println("Could not load coach image: " + team.getCoachPhotoPath());
+            }
+        }
     }
 
     private void updateTactics() {

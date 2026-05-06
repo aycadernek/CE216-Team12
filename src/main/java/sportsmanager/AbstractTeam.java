@@ -20,6 +20,7 @@ public abstract class AbstractTeam {
     private List<AbstractPlayer> activePlayers;
     private List<AbstractPlayer> substitutePlayers;
     private String coach;
+    private String coachPhotoPath;
     private String tactic;
     private int winCount;
     private int lossCount;
@@ -31,6 +32,7 @@ public abstract class AbstractTeam {
     public AbstractTeam(String name, String coach, String tactic) {
         this.name = name;
         this.coach = coach;
+        this.coachPhotoPath = "";
         this.tactic = tactic;
 
         this.allPlayers = new ArrayList<>();
@@ -57,6 +59,9 @@ public abstract class AbstractTeam {
 
     public String getCoach() { return coach; }
     public void setCoach(String coach) { this.coach = coach; }
+
+    public String getCoachPhotoPath() { return coachPhotoPath; }
+    public void setCoachPhotoPath(String coachPhotoPath) { this.coachPhotoPath = coachPhotoPath; }
 
     public String getTactic() { return tactic; }
     public void setTactic(String tactic) { this.tactic = tactic; }
