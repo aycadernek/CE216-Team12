@@ -25,6 +25,7 @@ public class GameScreenController {
     @FXML private Button playPeriodButton;
     @FXML private Button finishWeekButton;
     @FXML private Button substitutionButton;
+    @FXML private Button tacticButton;
     @FXML private Button backButton;
 
     private GameStatus gameStatus;
@@ -35,6 +36,7 @@ public class GameScreenController {
         playPeriodButton.setOnAction(event -> handlePlayPeriod());
         finishWeekButton.setOnAction(event -> handleFinishWeek());
         substitutionButton.setOnAction(event -> showSubstitutionPopup());
+        tacticButton.setOnAction(event -> showTacticChangePopup());
         backButton.setOnAction(event -> App.showMainTabs(gameStatus));
     }
 
@@ -86,27 +88,30 @@ public class GameScreenController {
 
     private void handlePlayPeriod() {
         if (currentMatch == null) {
-            showInfoPopup("Full Time",
-                currentMatch.getTeam1().getName() + " " + currentMatch.getTeam1Score()
-                    + " - " + currentMatch.getTeam2Score() + " " + currentMatch.getTeam2().getName()
-                        + "\nResult: " + currentMatch.getResult());
+
+            showInfoPopup("No Match", "There is no active match to play.");
             return;
-        }
+    }
 
         if (currentMatch.isFinished()) {
             showInfoPopup("Match Finished", "This match has already finished.\nResult: " + currentMatch.getResult());
             return;
-        }
+    }
 
         currentMatch.playPeriod();
         appendEvents();
         updateUI();
 
-        if (currentMatch.isFinished()) {
-            playPeriodButton.setDisable(true);
-            showInfoPopup("Full Time", "The match has finished.\nResult: " + currentMatch.getResult());
-        }
+    if (currentMatch.isFinished()) {
+        playPeriodButton.setDisable(true);
+        showInfoPopup(
+                "Full Time",
+                currentMatch.getTeam1().getName() + " " + currentMatch.getTeam1Score()
+                        + " - " + currentMatch.getTeam2Score() + " " + currentMatch.getTeam2().getName()
+                        + "\nResult: " + currentMatch.getResult()
+        );
     }
+}
 
     private void handleFinishWeek() {
 
@@ -256,6 +261,130 @@ public class GameScreenController {
         dialog.showAndWait();
     }
 
+    private void showTacticChangePopup() {
+        if (currentMatch == null) {
+            showInfoPopup("No Match", "There is no active match for tactic change.");
+            return;
+        }
+
+        if (currentMatch.getCurrentPeriod() == 0) {
+            showInfoPopup("Match Not Started", "Tactics can be changed only at half-time.");
+            return;
+        }
+
+        if (currentMatch.isFinished()) {
+            showInfoPopup("Match Finished", "Tactics cannot be changed after the match is finished.");
+            return;
+        }
+
+        if (gameStatus == null || gameStatus.getCurrentLeague() == null
+                || gameStatus.getCurrentLeague().getSportType() == null) {
+            showInfoPopup("Error", "No sport tactic data was found.");
+            return;
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Half-Time Tactic Change");
+        dialog.setHeaderText("Choose a team and a new tactic");
+
+        ButtonType confirmButton = new ButtonType("Confirm Tactic");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButton, cancelButton);
+
+        ComboBox<AbstractTeam> teamComboBox = new ComboBox<>();
+        teamComboBox.getItems().addAll(currentMatch.getTeam1(), currentMatch.getTeam2());
+        teamComboBox.setValue(currentMatch.getTeam1());
+
+        teamComboBox.setConverter(new StringConverter<AbstractTeam>() {
+            @Override
+            public String toString(AbstractTeam team) {
+                return team == null ? "" : team.getName() + " - Current: " + team.getTactic();
+            }
+
+            @Override
+            public AbstractTeam fromString(String string) {
+                return null;
+            }
+        });
+
+        ComboBox<String> tacticComboBox = new ComboBox<>();
+        tacticComboBox.setItems(FXCollections.observableArrayList(
+                gameStatus.getCurrentLeague().getSportType().getAvailableTactics()
+        ));
+
+        if (!tacticComboBox.getItems().isEmpty()) {
+            tacticComboBox.setValue(tacticComboBox.getItems().get(0));
+        }
+
+        teamComboBox.setOnAction(event -> {
+            AbstractTeam selectedTeam = teamComboBox.getValue();
+
+            if (selectedTeam != null
+                    && gameStatus.getCurrentLeague().getSportType().getAvailableTactics().contains(selectedTeam.getTactic())) {
+                tacticComboBox.setValue(selectedTeam.getTactic());
+            }
+        });
+
+        if (teamComboBox.getValue() != null
+                && gameStatus.getCurrentLeague().getSportType().getAvailableTactics().contains(teamComboBox.getValue().getTactic())) {
+            tacticComboBox.setValue(teamComboBox.getValue().getTactic());
+        }
+
+        VBox content = new VBox(10);
+        content.getChildren().addAll(
+                new Label("Team:"),
+                teamComboBox,
+                new Label("New Tactic:"),
+                tacticComboBox
+        );
+
+        dialog.getDialogPane().setContent(content);
+
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            dialog.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {
+        }
+
+        dialog.setResultConverter(button -> {
+            if (button == confirmButton) {
+                AbstractTeam selectedTeam = teamComboBox.getValue();
+                String selectedTactic = tacticComboBox.getValue();
+
+                if (selectedTeam == null || selectedTactic == null || selectedTactic.trim().isEmpty()) {
+                    showInfoPopup("Invalid Tactic", "Please select a team and a tactic.");
+                    return null;
+                }
+
+                String oldTactic = selectedTeam.getTactic();
+
+                try {
+                    selectedTeam.changeTactic(selectedTactic);
+
+                    String eventText = "TACTIC CHANGE: "
+                            + selectedTeam.getName()
+                            + " changed tactic from "
+                            + oldTactic
+                            + " to "
+                            + selectedTactic
+                            + ".";
+
+                    currentMatch.getEvents().add(eventText);
+                    appendEvents();
+
+                    showInfoPopup("Tactic Changed", eventText);
+
+                } catch (IllegalArgumentException exception) {
+                    showInfoPopup("Tactic Change Failed", exception.getMessage());
+                }
+            }
+
+            return null;
+    });
+
+    dialog.showAndWait();
+}
+
         private void updateSubstitutionChoices(
                 AbstractTeam selectedTeam,
                 ComboBox<AbstractPlayer> outPlayerComboBox,
@@ -279,49 +408,62 @@ public class GameScreenController {
             }
         }
             
+        private void updateUI() {
+            if (currentMatch == null) {
+                return;
+            }
 
-            private void updateUI() {
-                if (currentMatch == null) {
-                    return;
-                }
+            matchTitleLabel.setText(
+                    currentMatch.getTeam1().getName() + " vs " + currentMatch.getTeam2().getName()
+            );
 
-                matchTitleLabel.setText(
-                        currentMatch.getTeam1().getName() + " vs " + currentMatch.getTeam2().getName()
-                );
+            scoreLabel.setText(
+                    currentMatch.getTeam1Score() + " - " + currentMatch.getTeam2Score()
+            );
 
-                scoreLabel.setText(
-                        currentMatch.getTeam1Score() + " - " + currentMatch.getTeam2Score()
-                );
+            periodLabel.setText(
+                    "Period: " + currentMatch.getCurrentPeriod() + " / " + currentMatch.getTotalPeriods()
+            );
 
-                periodLabel.setText(
-                        "Period: " + currentMatch.getCurrentPeriod() + " / " + currentMatch.getTotalPeriods()
-                );
+            if (currentMatch.isFinished()) {
+                resultLabel.setText("Result: " + currentMatch.getResult());
+                playPeriodButton.setText("MATCH FINISHED");
+                playPeriodButton.setDisable(true);
 
-                if (currentMatch.isFinished()) {
-                    resultLabel.setText("Result: " + currentMatch.getResult());
-                    playPeriodButton.setText("MATCH FINISHED");
-                    playPeriodButton.setDisable(true);
+                substitutionButton.setDisable(true);
 
+                tacticButton.setVisible(false);
+                tacticButton.setManaged(false);
+
+                finishWeekButton.setVisible(true);
+                finishWeekButton.setManaged(true);
+            } else {
+                resultLabel.setText("");
+                playPeriodButton.setDisable(false);
+
+                finishWeekButton.setVisible(false);
+                finishWeekButton.setManaged(false);
+
+                if (currentMatch.getCurrentPeriod() == 0) {
+                    playPeriodButton.setText("PLAY FIRST HALF");
                     substitutionButton.setDisable(true);
 
-                    finishWeekButton.setVisible(true);
-                    finishWeekButton.setManaged(true);
+                    tacticButton.setVisible(false);
+                    tacticButton.setManaged(false);
+
+                } else if (currentMatch.getCurrentPeriod() == 1) {
+                    playPeriodButton.setText("PLAY SECOND HALF");
+                    substitutionButton.setDisable(false);
+
+                    tacticButton.setVisible(true);
+                    tacticButton.setManaged(true);
+
                 } else {
-                    resultLabel.setText("");
-                    playPeriodButton.setDisable(false);
+                    playPeriodButton.setText("PLAY PERIOD");
+                    substitutionButton.setDisable(false);
 
-                    finishWeekButton.setVisible(false);
-                    finishWeekButton.setManaged(false);
-
-                    if (currentMatch.getCurrentPeriod() == 0) {
-                        playPeriodButton.setText("PLAY FIRST HALF");
-                        substitutionButton.setDisable(true);
-                    } else if (currentMatch.getCurrentPeriod() == 1) {
-                        playPeriodButton.setText("PLAY SECOND HALF");
-                        substitutionButton.setDisable(false);
-                    } else {
-                        playPeriodButton.setText("PLAY PERIOD");
-                        substitutionButton.setDisable(false);
+                    tacticButton.setVisible(false);
+                    tacticButton.setManaged(false);
                 }
             }
         }
