@@ -88,30 +88,49 @@ public class GameScreenController {
 
     private void handlePlayPeriod() {
         if (currentMatch == null) {
-
             showInfoPopup("No Match", "There is no active match to play.");
             return;
-    }
+        }
 
         if (currentMatch.isFinished()) {
             showInfoPopup("Match Finished", "This match has already finished.\nResult: " + currentMatch.getResult());
             return;
-    }
+        }
 
-        currentMatch.playPeriod();
-        appendEvents();
-        updateUI();
-
-    if (currentMatch.isFinished()) {
+        backButton.setDisable(true);
         playPeriodButton.setDisable(true);
-        showInfoPopup(
-                "Full Time",
-                currentMatch.getTeam1().getName() + " " + currentMatch.getTeam1Score()
-                        + " - " + currentMatch.getTeam2Score() + " " + currentMatch.getTeam2().getName()
-                        + "\nResult: " + currentMatch.getResult()
-        );
+        substitutionButton.setDisable(true);
+        tacticButton.setDisable(true);
+        finishWeekButton.setDisable(true);
+
+        int oldSize = currentMatch.getEvents().size();
+        currentMatch.playPeriod();
+        
+        java.util.List<String> newEvents = new java.util.ArrayList<>(currentMatch.getEvents().subList(oldSize, currentMatch.getEvents().size()));
+
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+        for (int i = 0; i < newEvents.size(); i++) {
+            String ev = newEvents.get(i);
+            timeline.getKeyFrames().add(new javafx.animation.KeyFrame(javafx.util.Duration.millis(500 * (i + 1)), e -> {
+                eventsTextArea.appendText(ev + "\n");
+                eventsTextArea.positionCaret(eventsTextArea.getText().length());
+            }));
+        }
+        timeline.setOnFinished(e -> {
+            updateUI();
+            if (currentMatch.isFinished()) {
+                javafx.application.Platform.runLater(() -> {
+                    showInfoPopup(
+                            "Full Time",
+                            currentMatch.getTeam1().getName() + " " + currentMatch.getTeam1Score()
+                                    + " - " + currentMatch.getTeam2Score() + " " + currentMatch.getTeam2().getName()
+                                    + "\nResult: " + currentMatch.getResult()
+                    );
+                });
+            }
+        });
+        timeline.play();
     }
-}
 
     private void handleFinishWeek() {
 
@@ -427,16 +446,15 @@ public class GameScreenController {
 
             if (currentMatch.isFinished()) {
                 resultLabel.setText("Result: " + currentMatch.getResult());
-                playPeriodButton.setText("MATCH FINISHED");
-                playPeriodButton.setDisable(true);
+                playPeriodButton.setVisible(false);
+                playPeriodButton.setManaged(false);
 
                 substitutionButton.setDisable(true);
-
-                tacticButton.setVisible(false);
-                tacticButton.setManaged(false);
+                tacticButton.setDisable(true);
 
                 finishWeekButton.setVisible(true);
                 finishWeekButton.setManaged(true);
+                finishWeekButton.setDisable(false);
                 
                 backButton.setDisable(true);
             } else {
@@ -451,23 +469,17 @@ public class GameScreenController {
                 if (currentMatch.getCurrentPeriod() == 0) {
                     playPeriodButton.setText("PLAY FIRST HALF");
                     substitutionButton.setDisable(true);
-
-                    tacticButton.setVisible(false);
-                    tacticButton.setManaged(false);
+                    tacticButton.setDisable(true);
 
                 } else if (currentMatch.getCurrentPeriod() == 1) {
                     playPeriodButton.setText("PLAY SECOND HALF");
                     substitutionButton.setDisable(false);
-
-                    tacticButton.setVisible(true);
-                    tacticButton.setManaged(true);
+                    tacticButton.setDisable(false);
 
                 } else {
                     playPeriodButton.setText("PLAY PERIOD");
                     substitutionButton.setDisable(false);
-
-                    tacticButton.setVisible(false);
-                    tacticButton.setManaged(false);
+                    tacticButton.setDisable(true);
                 }
             }
         }

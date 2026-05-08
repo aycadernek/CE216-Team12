@@ -72,8 +72,6 @@
 
         <Button fx:id="tacticButton"
                 text="TACTICS"
-                visible="false"
-                managed="false"
                 style="-fx-background-color: #6a4c93; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 30;" />
         <Button fx:id="playPeriodButton"
                 text="PLAY PERIOD"

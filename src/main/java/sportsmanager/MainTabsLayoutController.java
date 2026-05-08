@@ -197,7 +197,7 @@ public class MainTabsLayoutController {
             
             if (!hasMatch) {
                 nextMatchInfoLabel.setText("No match this week (BYE)");
-                startMatchButton.setText("Simulate Week");
+                startMatchButton.setText("Next Week");
             }
         } else {
             nextMatchInfoLabel.setText("No upcoming match");
