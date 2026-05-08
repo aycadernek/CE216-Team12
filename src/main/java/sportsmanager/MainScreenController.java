@@ -3,12 +3,15 @@ package sportsmanager;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class MainScreenController {
 
@@ -16,6 +19,7 @@ public class MainScreenController {
     @FXML private ComboBox<String> sportComboBox;
     @FXML private Button startButton;
     @FXML private Button loadButton;
+    @FXML private Button helpButton;
     @FXML private Button exitButton;
     @FXML private ImageView appLogoImageView;
 
@@ -68,6 +72,25 @@ public class MainScreenController {
         }
 
         App.showMainTabs(loadedGame);
+    }
+
+    @FXML
+    void handleHelp(ActionEvent event) {
+        try {
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Sports Manager - Help Manual");
+            
+            WebView webView = new WebView();
+            String url = getClass().getResource("/help_manual.html").toExternalForm();
+            webView.getEngine().load(url);
+            
+            Scene scene = new Scene(webView, 800, 600);
+            helpStage.setScene(scene);
+            helpStage.show();
+        } catch (Exception e) {
+            showAlert("Help Error", "Could not load the help manual: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML

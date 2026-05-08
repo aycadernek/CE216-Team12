@@ -13,6 +13,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
+        primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/images/app/app_logo.png")));
         showMainScreen();
     }
 
