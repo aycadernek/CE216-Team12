@@ -1,5 +1,6 @@
 package sportsmanager;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ public class TeamScreenController {
 
     @FXML private TableView<AbstractPlayer> playersTable;
     @FXML private TableColumn<AbstractPlayer, Void> infoColumn;
+    @FXML private TableColumn<AbstractPlayer, Number> numberColumn;
     @FXML private TableColumn<AbstractPlayer, String> nameColumn;
     @FXML private TableColumn<AbstractPlayer, String> statusColumn;
     @FXML private TableColumn<AbstractPlayer, String> injuryColumn;
@@ -68,6 +70,8 @@ public class TeamScreenController {
                 }
             }
         });
+
+        numberColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getTableView().getItems().indexOf(cellData.getValue()) + 1));
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         

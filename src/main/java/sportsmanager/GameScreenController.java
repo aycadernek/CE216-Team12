@@ -437,12 +437,16 @@ public class GameScreenController {
 
                 finishWeekButton.setVisible(true);
                 finishWeekButton.setManaged(true);
+                
+                backButton.setDisable(true);
             } else {
                 resultLabel.setText("");
                 playPeriodButton.setDisable(false);
 
                 finishWeekButton.setVisible(false);
                 finishWeekButton.setManaged(false);
+                
+                backButton.setDisable(currentMatch.getCurrentPeriod() > 0);
 
                 if (currentMatch.getCurrentPeriod() == 0) {
                     playPeriodButton.setText("PLAY FIRST HALF");

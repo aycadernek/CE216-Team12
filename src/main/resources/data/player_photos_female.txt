@@ -3,3 +3,11 @@
 /images/players/player_female_3.png
 /images/players/player_female_4.png
 /images/players/player_female_5.png
+/images/players/player_female_6.png
+/images/players/player_female_7.png
+/images/players/player_female_8.png
+/images/players/player_female_9.png
+/images/players/player_female_10.png
+/images/players/player_female_11.png
+/images/players/player_female_12.png
+/images/players/player_female_13.png

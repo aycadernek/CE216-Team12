@@ -121,6 +121,8 @@ public class MainTabsLayoutController {
             AbstractTeam team = league.getTeamByName(gameStatus.getUserTeamName());
             if (team == null || league == null) return;
 
+            team.isReadyToPlay();
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/TeamScreen.fxml"));
             Parent root = loader.load();
             teamScreenController = loader.getController();

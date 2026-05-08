@@ -65,8 +65,8 @@ public class FootballTeam extends AbstractTeam {
     }
 
     @Override
-    public boolean isReadyToPlay() {
-        return getActivePlayers().size() == PLAYERS_ON_FIELD;
+    public int getRequiredStarters() {
+        return PLAYERS_ON_FIELD;
     }
 
     @Override

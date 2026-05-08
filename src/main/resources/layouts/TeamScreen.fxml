@@ -21,6 +21,7 @@
             </columnResizePolicy>
             <columns>
                 <TableColumn fx:id="infoColumn" prefWidth="40.0" minWidth="40.0" maxWidth="40.0" />
+                <TableColumn fx:id="numberColumn" prefWidth="40.0" minWidth="40.0" maxWidth="40.0" text="#" />
                 <TableColumn fx:id="nameColumn" prefWidth="100.0" text="Name" />
                 <TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status" />
                 <TableColumn fx:id="injuryColumn" prefWidth="120.0" text="Injury Status" />

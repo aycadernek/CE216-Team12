@@ -3,3 +3,12 @@
 /images/players/player_male_3.png
 /images/players/player_male_4.png
 /images/players/player_male_5.png
+/images/players/player_male_6.png
+/images/players/player_male_7.png
+/images/players/player_male_8.png
+/images/players/player_male_9.png
+/images/players/player_male_10.png
+/images/players/player_male_11.png
+/images/players/player_male_12.png
+/images/players/player_male_13.png
+/images/players/player_male_14.png

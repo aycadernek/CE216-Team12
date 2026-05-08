@@ -24,6 +24,9 @@ public class DataGenerator {
 
     private static final List<String> PLAYER_PHOTOS_MALE = loadLinesSafely("/data/player_photos_male.txt");
     private static final List<String> PLAYER_PHOTOS_FEMALE = loadLinesSafely("/data/player_photos_female.txt");
+    
+    private static final List<String> COACH_PHOTOS_MALE = loadLinesSafely("/data/coach_photos_male.txt");
+    private static final List<String> COACH_PHOTOS_FEMALE = loadLinesSafely("/data/coach_photos_female.txt");
 
     private static List<String> loadLinesSafely(String path) {
         try {
@@ -102,6 +105,11 @@ public class DataGenerator {
 
     public static String generatePlayerPhoto() {
         List<String> pool = random.nextInt(2) == 0 ? PLAYER_PHOTOS_MALE : PLAYER_PHOTOS_FEMALE;
+        return pool.isEmpty() ? "" : getRandomItem(pool);
+    }
+    
+    public static String generateCoachPhoto(int gender) {
+        List<String> pool = (gender == 0) ? COACH_PHOTOS_MALE : COACH_PHOTOS_FEMALE;
         return pool.isEmpty() ? "" : getRandomItem(pool);
     }
 
@@ -185,12 +193,14 @@ public class DataGenerator {
 
     public static FootballTeam generateFootballTeam(String teamName) {
         int gender = random.nextInt(2);  
+        List<String> footballTactics = new Football().getAvailableTactics();
+        String randomTactic = footballTactics.get(random.nextInt(footballTactics.size()));
         FootballTeam team = new FootballTeam(
                 teamName,
                 generateCoachName(gender),
-                "4-4-2"
+                randomTactic
         );
-        team.setCoachPhotoPath(gender == 0 ? "/images/coaches/coach_male_1.png" : "/images/coaches/coach_female_1.png");
+        team.setCoachPhotoPath(generateCoachPhoto(gender));
 
         List<AbstractPlayer> players = generateFootballPlayers(18);
 
@@ -209,12 +219,14 @@ public class DataGenerator {
 
     public static HandballTeam generateHandballTeam(String teamName) {
         int gender = random.nextInt(2); 
+        List<String> handballTactics = new Handball().getAvailableTactics();
+        String randomTactic = handballTactics.get(random.nextInt(handballTactics.size()));
         HandballTeam team = new HandballTeam(
                 teamName,
                 generateCoachName(gender),
-                "6-0"
+                randomTactic
         );
-        team.setCoachPhotoPath(gender == 0 ? "/images/coaches/coach_male_1.png" : "/images/coaches/coach_female_1.png");
+        team.setCoachPhotoPath(generateCoachPhoto(gender));
 
         List<AbstractPlayer> players = generateHandballPlayers(14);
 

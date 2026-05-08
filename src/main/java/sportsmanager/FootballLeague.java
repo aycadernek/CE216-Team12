@@ -96,6 +96,9 @@ public class FootballLeague extends AbstractLeague {
             }
         }
         if (allFinished) {
+            for (AbstractTeam team : getTeams()) {
+                team.fillStarters(team.getRequiredStarters());
+            }
             advanceWeek();
         }
     }

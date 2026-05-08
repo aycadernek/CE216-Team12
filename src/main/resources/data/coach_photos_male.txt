@@ -1,0 +1,4 @@
+/images/coaches/coach_male_1.png
+/images/coaches/coach_male_2.png
+/images/coaches/coach_male_3.png
+/images/coaches/coach_male_4.png

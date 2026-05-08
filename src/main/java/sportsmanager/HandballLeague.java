@@ -73,6 +73,9 @@ public class HandballLeague extends AbstractLeague {
             }
 
         decrementInjuries();
+        for (AbstractTeam team : getTeams()) {
+            team.fillStarters(team.getRequiredStarters());
+        }
         advanceWeek();
     }
 

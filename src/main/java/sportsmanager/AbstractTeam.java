@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
@@ -91,6 +92,39 @@ public abstract class AbstractTeam {
         substitutePlayers.add(outPlayer);
     }
 
+    public void fillStarters(int requiredStarters) {
+        Iterator<AbstractPlayer> activeIter = activePlayers.iterator();
+        while (activeIter.hasNext()) {
+            AbstractPlayer p = activeIter.next();
+            if (p.isInjured()) {
+                substitutePlayers.add(p);
+                activeIter.remove(); 
+            }
+        }
+
+        Iterator<AbstractPlayer> subIter = substitutePlayers.iterator();
+        while (subIter.hasNext() && activePlayers.size() < requiredStarters) {
+            AbstractPlayer p = subIter.next();
+            if (!p.isInjured()) {
+                activePlayers.add(p);
+                subIter.remove(); 
+            }
+        }
+    }
+
+    public boolean isReadyToPlay() {
+        int requiredStarters = getRequiredStarters();
+        if (getActivePlayers().size() == requiredStarters) {
+            return true;
+        }
+        for (AbstractPlayer sub : getSubstitutePlayers()) {
+            if (!sub.isInjured()) {
+                return false;
+            }
+        }
+        return !getActivePlayers().isEmpty();
+    }
+
     public void changeTactic(String newTactic) {
         if (newTactic == null || newTactic.trim().isEmpty()) {
             throw new IllegalArgumentException("Tactic cannot be empty.");
@@ -99,5 +133,5 @@ public abstract class AbstractTeam {
     }
     public abstract void addPlayerToRoster(AbstractPlayer player);
     public abstract void setMatchDayLineup(List<AbstractPlayer> starters, List<AbstractPlayer> bench);
-    public abstract boolean isReadyToPlay();
+    public abstract int getRequiredStarters();
 }
