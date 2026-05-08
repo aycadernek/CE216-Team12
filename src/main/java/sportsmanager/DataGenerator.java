@@ -27,6 +27,7 @@ public class DataGenerator {
     
     private static final List<String> COACH_PHOTOS_MALE = loadLinesSafely("/data/coach_photos_male.txt");
     private static final List<String> COACH_PHOTOS_FEMALE = loadLinesSafely("/data/coach_photos_female.txt");
+    private static final List<String> TEAM_LOGOS = loadLinesSafely("/data/team_logos.txt");
 
     private static List<String> loadLinesSafely(String path) {
         try {
@@ -201,6 +202,7 @@ public class DataGenerator {
                 randomTactic
         );
         team.setCoachPhotoPath(generateCoachPhoto(gender));
+        team.setTeamLogoPath(determineTeamLogoPath(teamName));
 
         List<AbstractPlayer> players = generateFootballPlayers(18);
 
@@ -227,6 +229,7 @@ public class DataGenerator {
                 randomTactic
         );
         team.setCoachPhotoPath(generateCoachPhoto(gender));
+        team.setTeamLogoPath(determineTeamLogoPath(teamName));
 
         List<AbstractPlayer> players = generateHandballPlayers(14);
 
@@ -237,6 +240,16 @@ public class DataGenerator {
         );
 
         return team;
+    }
+
+    private static String determineTeamLogoPath(String teamName) {
+        if (teamName == null || teamName.isEmpty()) return "";
+        int index = TEAM_NAMES.indexOf(teamName);
+        if (index != -1 && index < TEAM_LOGOS.size()) {
+            return TEAM_LOGOS.get(index);
+        }
+        
+        return "";
     }
 
     public static List<FootballTeam> generateFootballTeams(int teamCount) {

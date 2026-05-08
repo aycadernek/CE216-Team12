@@ -23,6 +23,7 @@ public abstract class AbstractTeam {
     private String coach;
     private String coachPhotoPath;
     private String tactic;
+    private String teamLogoPath;
     private int winCount;
     private int lossCount;
     private int drawCount;
@@ -44,7 +45,13 @@ public abstract class AbstractTeam {
         this.lossCount = 0;
         this.drawCount = 0;
     }
+    public String getTeamLogoPath() {
+        return teamLogoPath;
+    }
 
+    public void setTeamLogoPath(String teamLogoPath) {
+        this.teamLogoPath = teamLogoPath;
+    }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

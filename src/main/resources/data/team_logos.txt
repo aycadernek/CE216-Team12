@@ -1,0 +1,15 @@
+/images/teams/team_logo_falcon.png
+/images/teams/team_logo_wolf.png
+/images/teams/team_logo_titans.png
+/images/teams/team_logo_storm.png
+/images/teams/team_logo_lion.png
+/images/teams/team_logo_eagle.png
+/images/teams/team_logo_meteors.png
+/images/teams/team_logo_mariners.png
+/images/teams/team_logo_stripes.png
+/images/teams/team_logo_thunder.png
+/images/teams/team_logo_knights.png
+/images/teams/team_logo_shark.png
+/images/teams/team_logo_scorpions.png
+/images/teams/team_logo_tigers.png
+/images/teams/team_logo_spartan.png

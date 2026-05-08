@@ -12,6 +12,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -27,6 +29,8 @@ public class GameScreenController {
     @FXML private Button substitutionButton;
     @FXML private Button tacticButton;
     @FXML private Button backButton;
+    @FXML private ImageView homeTeamLogo;
+    @FXML private ImageView awayTeamLogo;
 
     private GameStatus gameStatus;
     private AbstractMatch currentMatch;
@@ -51,6 +55,13 @@ public class GameScreenController {
             playPeriodButton.setDisable(true);
             eventsTextArea.setText("No upcoming match was found for your team.");
             return;
+        }
+        if (currentMatch.getTeam1().getTeamLogoPath() != null && !currentMatch.getTeam1().getTeamLogoPath().isEmpty()) {
+            homeTeamLogo.setImage(new Image(getClass().getResourceAsStream(currentMatch.getTeam1().getTeamLogoPath())));
+        }
+
+        if (currentMatch.getTeam2().getTeamLogoPath() != null && !currentMatch.getTeam2().getTeamLogoPath().isEmpty()) {
+            awayTeamLogo.setImage(new Image(getClass().getResourceAsStream(currentMatch.getTeam2().getTeamLogoPath())));
         }
 
         updateUI();

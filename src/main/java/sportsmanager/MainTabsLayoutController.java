@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 
 public class MainTabsLayoutController {
 
-    @FXML private Label teamNameLabel;
+    @FXML private Label userNameLabel;
     @FXML private Label sportTypeLabel;
     @FXML private Label weekLabel;
 
@@ -88,6 +88,7 @@ public class MainTabsLayoutController {
                 loadTeamScreen();
             }
         });    
+        mainTabPane.getSelectionModel().select(teamTab);
     }
 
     public void setGameData(GameStatus gameStatus) {
@@ -103,10 +104,10 @@ public class MainTabsLayoutController {
         if (gameStatus == null) return;
 
         AbstractLeague league = gameStatus.getCurrentLeague();
-        String userTeamName = gameStatus.getUserTeamName();
+        String userName = gameStatus.getUsername();
 
-        if (userTeamName != null) {
-            teamNameLabel.setText(userTeamName);
+        if (userName != null) {
+            userNameLabel.setText(userName);
         }
         if (league != null) {
             sportTypeLabel.setText(league.getSportType() != null ? league.getSportType().getSportName() : "Unknown");

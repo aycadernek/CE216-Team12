@@ -33,6 +33,7 @@ public class TeamScreenController {
 
     @FXML private ImageView coachImageView;
     @FXML private Label coachNameLabel;
+    @FXML private ImageView teamLogoImageView;
 
     private GameStatus gameStatus;
 
@@ -308,7 +309,7 @@ public class TeamScreenController {
         updateTactics();
 
         if (coachNameLabel != null) {
-            coachNameLabel.setText("Coach: " + team.getCoach());
+            coachNameLabel.setText( team.getName() + " | Coach: " + team.getCoach());
         }
         
         if (coachImageView != null && team.getCoachPhotoPath() != null && !team.getCoachPhotoPath().isEmpty()) {
@@ -319,6 +320,17 @@ public class TeamScreenController {
                 }
             } catch (Exception e) {
                 System.out.println("Could not load coach image: " + team.getCoachPhotoPath());
+            }
+        }
+
+        if (teamLogoImageView != null && team.getTeamLogoPath() != null && !team.getTeamLogoPath().isEmpty()) {
+            try {
+                InputStream imgStream = getClass().getResourceAsStream(team.getTeamLogoPath());
+                if (imgStream != null) {
+                    teamLogoImageView.setImage(new Image(imgStream));
+                }
+            } catch (Exception e) {
+                System.out.println("Could not load team logo: " + team.getTeamLogoPath());
             }
         }
     }

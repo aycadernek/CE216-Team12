@@ -19,7 +19,7 @@
    
     <BorderPane style="-fx-background-color: #139bb9; -fx-padding: 15; -fx-border-color: black; -fx-border-width: 0 0 2 0;">
         <left>
-            <Label fx:id="teamNameLabel" style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+            <Label fx:id="userNameLabel" style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
         </left>
         <right>
             <VBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
