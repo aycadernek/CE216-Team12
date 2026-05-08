@@ -79,16 +79,15 @@ public class MainScreenController {
         Football sport = new Football();
         FootballLeague league = new FootballLeague("Football League");
 
-        FootballTeam team1 = DataGenerator.generateFootballTeam();
-        FootballTeam team2 = DataGenerator.generateFootballTeam();
-
-        league.addTeam(team1);
-        league.addTeam(team2);
+        java.util.List<FootballTeam> teams = DataGenerator.generateFootballTeams(4);
+        for (FootballTeam team : teams) {
+            league.addTeam(team);
+        }
         league.createLeague();
 
         GameStatus gameStatus = new GameStatus();
         gameStatus.startNewGame(username, sport, league);
-        gameStatus.setUserTeamName(team1.getName());
+        gameStatus.setUserTeamName(teams.get(0).getName());
 
         return gameStatus;
     }
@@ -97,16 +96,15 @@ public class MainScreenController {
         Handball sport = new Handball();
         HandballLeague league = new HandballLeague("Handball League");
 
-        HandballTeam team1 = DataGenerator.generateHandballTeam();
-        HandballTeam team2 = DataGenerator.generateHandballTeam();
-
-        league.addTeam(team1);
-        league.addTeam(team2);
+        java.util.List<HandballTeam> teams = DataGenerator.generateHandballTeams(3);
+        for (HandballTeam team : teams) {
+            league.addTeam(team);
+        }
         league.createLeague();
 
         GameStatus gameStatus = new GameStatus();
         gameStatus.startNewGame(username, sport, league);
-        gameStatus.setUserTeamName(team1.getName());
+        gameStatus.setUserTeamName(teams.get(0).getName());
 
         return gameStatus;
     }

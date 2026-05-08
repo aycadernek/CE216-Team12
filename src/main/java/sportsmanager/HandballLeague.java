@@ -55,22 +55,28 @@ public class HandballLeague extends AbstractLeague {
         if (getCurrentWeek() > getTotalWeeks()) return;
         List<AbstractMatch> currentWeekMatches = getMatchesForWeek(getCurrentWeek());
 
-
         if(currentWeekMatches.isEmpty()) {
             advanceWeek();
             return;
         }
 
-            for (AbstractMatch match : currentWeekMatches) {
-                if (!match.isFinished()) {
-                    for (int i = 0; i < match.getTotalPeriods(); i++) {
-                        match.playPeriod();
-                    }
-                    match.setFinished(true);
-                    updateTeamStats(match);
-                    addCompletedMatch(match);
+        boolean weekFinalized = false;
+        for (AbstractMatch match : currentWeekMatches) {
+            if (!match.isFinished()) {
+                for (int i = 0; i < match.getTotalPeriods(); i++) {
+                    match.playPeriod();
                 }
+                match.setFinished(true);
             }
+        }
+
+        for (AbstractMatch match : currentWeekMatches) {
+            if (match.isFinished() && !getCompletedMatches().contains(match)) {
+                addCompletedMatch(match);
+                updateTeamStats(match);
+                weekFinalized = true;
+            }
+        }
 
         decrementInjuries();
         for (AbstractTeam team : getTeams()) {

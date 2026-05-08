@@ -42,6 +42,22 @@ public class LeagueScreenController {
         checkWinner();
     }
 
+    @FXML
+    private void handleSeasonResults() {
+        if (currentGameStatus == null || currentGameStatus.getCurrentLeague() == null) {
+            return;
+        }
+
+        if (!currentGameStatus.isLeagueOver()) {
+            showInfoPopup("Season Results", "Season results are only available after the league is finished.");
+            return;
+        }
+
+        AbstractLeague league = currentGameStatus.getCurrentLeague();
+        league.calculateLeagueResult();
+        showSeasonResultsPopup();
+    }
+
     private void refreshTable() {
         if (currentGameStatus == null || currentGameStatus.getCurrentLeague() == null) {
             return;
@@ -63,18 +79,79 @@ public class LeagueScreenController {
     }
 
     private void checkWinner() {
+        if (currentGameStatus == null || currentGameStatus.getCurrentLeague() == null) {
+            winnerLabel.setText("WINNER : PENDING");
+            seasonResultsBtn.setDisable(true);
+            return;
+        }
+
         AbstractLeague league = currentGameStatus.getCurrentLeague();
         if (currentGameStatus.isLeagueOver()) {
 
             league.calculateLeagueResult();
-            AbstractTeam winner = league.getTeams().get(0);
-
-            winnerLabel.setText("WINNER : " + winner.getName().toUpperCase());
-            seasonResultsBtn.setDisable(false);
+            if (!league.getTeams().isEmpty()) {
+                AbstractTeam winner = league.getTeams().get(0);
+                winnerLabel.setText("WINNER : " + winner.getName().toUpperCase());
+                seasonResultsBtn.setDisable(false);
+            } else {
+                winnerLabel.setText("WINNER : PENDING");
+                seasonResultsBtn.setDisable(true);
+            }
         } else {
             winnerLabel.setText("WINNER : PENDING");
             seasonResultsBtn.setDisable(true);
         }
+    }
+
+    private void showSeasonResultsPopup() {
+        AbstractLeague league = currentGameStatus.getCurrentLeague();
+        ISport sport = currentGameStatus.getCurrentSport();
+
+        StringBuilder results = new StringBuilder();
+        results.append("Final Standings\n\n");
+
+        int rank = 1;
+        for (AbstractTeam team : league.getTeams()) {
+            int played = team.getWinCount() + team.getDrawCount() + team.getLossCount();
+            int points = (team.getWinCount() * sport.getWinPoints())
+                    + (team.getDrawCount() * sport.getDrawPoints())
+                    + (team.getLossCount() * sport.getLossPoints());
+
+            results.append(rank).append(". ")
+                    .append(team.getName())
+                    .append(" | P:").append(played)
+                    .append(" W:").append(team.getWinCount())
+                    .append(" D:").append(team.getDrawCount())
+                    .append(" L:").append(team.getLossCount())
+                    .append(" | Pts:").append(points)
+                    .append('\n');
+            rank++;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Season Results");
+        alert.setHeaderText("Season finished");
+        alert.setContentText(results.toString());
+        alert.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+
+        try {
+            java.net.URL cssUrl = getClass().getResource("/layouts/styles.css");
+            if (cssUrl != null) {
+                alert.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+            }
+        } catch (Exception e) {
+        }
+
+        alert.showAndWait();
+    }
+
+    private void showInfoPopup(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+        alert.showAndWait();
     }
 
     private void setupEventsColumn() {
