@@ -69,6 +69,15 @@ public class FootballPlayer extends AbstractPlayer {
     public void receiveYellowCard() { this.yellowCards++; }
     public void receiveRedCard() { this.redCards++; }
 
+    @Override
+    public void resetStats() {
+        this.goals = 0;
+        this.assists = 0;
+        this.yellowCards = 0;
+        this.redCards = 0;
+        setInjured(false);
+    }
+
     // for debugging
     @Override
     public String toString() {

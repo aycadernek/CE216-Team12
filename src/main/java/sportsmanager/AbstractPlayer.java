@@ -103,6 +103,7 @@ public abstract class AbstractPlayer {
     }
 
     public abstract java.util.Map<String, String> getSpecificStats();
+    public abstract void resetStats();
     public java.util.Map<String, String> getAllInfo() {
         java.util.Map<String, String> info = new java.util.LinkedHashMap<>();
         

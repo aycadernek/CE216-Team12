@@ -109,6 +109,17 @@ public class HandballPlayer extends AbstractPlayer {
         redCards++;
     }
 
+    @Override
+    public void resetStats() {
+        this.goals = 0;
+        this.assists = 0;
+        this.saves = 0;
+        this.suspensions = 0;
+        this.yellowCards = 0;
+        this.redCards = 0;
+        setInjured(false);
+    }
+
      @Override
 
     public String toString() {

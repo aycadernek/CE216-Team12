@@ -51,12 +51,19 @@ public class MainTabsLayoutController {
             if (this.gameStatus == null) return;
             AbstractLeague league = this.gameStatus.getCurrentLeague();
             if (league == null) return;
-            AbstractTeam userTeam = league.getTeamByName(this.gameStatus.getUserTeamName());
-            if (userTeam == null) return;
-
+            
             if (this.gameStatus.isLeagueOver()) {
+                league.resetLeague();
+                updateHeader();
+                updateNextMatch();
+                loadScheduleScreen();
+                loadLeagueScreen();
+                loadTeamScreen();
                 return;
             }
+
+            AbstractTeam userTeam = league.getTeamByName(this.gameStatus.getUserTeamName());
+            if (userTeam == null) return;
 
             boolean hasMatchThisWeek = false;
             for (AbstractMatch match : league.getMatchesForWeek(league.getCurrentWeek())) {
@@ -178,8 +185,12 @@ public class MainTabsLayoutController {
             }
 
             if (gameStatus.isLeagueOver()) {
+                if (!"New League".equals(startMatchButton.getText())) {
+                    showLeagueFinishedPopup(league);
+                }
                 nextMatchInfoLabel.setText("League Finished");
-                startMatchButton.setDisable(true);
+                startMatchButton.setText("New League");
+                startMatchButton.setDisable(false);
                 return;
             } else {
                 startMatchButton.setDisable(false);
@@ -205,8 +216,87 @@ public class MainTabsLayoutController {
         }
     }
 
+    private void showLeagueFinishedPopup(AbstractLeague league) {
+        league.calculateLeagueResult();
+        List<AbstractTeam> teams = league.getTeams();
+        ISport sport = gameStatus.getCurrentSport();
+        
+        AbstractTeam userTeam = league.getTeamByName(gameStatus.getUserTeamName());
+        boolean userWon = !teams.isEmpty() && teams.get(0).equals(userTeam);
+
+        javafx.scene.control.Dialog<Void> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("End of Season");
+        dialog.setHeaderText(userWon ? "Congratulations! You Won the League! 🏆" : "The league has finished!");
+
+        javafx.scene.control.ButtonType okButtonType = new javafx.scene.control.ButtonType("Finish", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(okButtonType);
+
+        VBox content = new VBox(15);
+        content.setAlignment(javafx.geometry.Pos.CENTER);
+        content.setStyle("-fx-padding: 20px; -fx-background-color: #f4f4f4; -fx-border-radius: 10px; -fx-border-color: #dcdcdc; -fx-border-width: 2px;");
+
+        Label titleLabel = new Label("Final Standings - Top 3");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 0 0 10 0;");
+        content.getChildren().add(titleLabel);
+
+        for (int i = 0; i < Math.min(3, teams.size()); i++) {
+            AbstractTeam team = teams.get(i);
+            
+            javafx.scene.layout.HBox teamBox = new javafx.scene.layout.HBox(15);
+            teamBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            teamBox.setStyle("-fx-background-color: white; -fx-padding: 10px 20px; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+            
+            Label rankLabel = new Label("#" + (i + 1));
+            rankLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: " + (i == 0 ? "#f1c40f" : (i == 1 ? "#95a5a6" : "#cd7f32")) + ";");
+            rankLabel.setMinWidth(40);
+            
+            javafx.scene.image.ImageView logoView = new javafx.scene.image.ImageView();
+            logoView.setFitHeight(40);
+            logoView.setFitWidth(40);
+            if (team.getTeamLogoPath() != null && !team.getTeamLogoPath().isEmpty()) {
+                try {
+                    logoView.setImage(new javafx.scene.image.Image(getClass().getResourceAsStream(team.getTeamLogoPath())));
+                } catch (Exception e) {}
+            }
+            
+            Label nameLabel = new Label(team.getName());
+            nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #34495e;");
+            if (team.equals(userTeam)) {
+                nameLabel.setText(team.getName() + " (YOU)");
+                nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
+            }
+            
+            int points = (team.getWinCount() * sport.getWinPoints())
+                       + (team.getDrawCount() * sport.getDrawPoints())
+                       + (team.getLossCount() * sport.getLossPoints());
+            Label ptsLabel = new Label(points + " pts");
+            ptsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #7f8c8d;");
+            
+            javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+            javafx.scene.layout.HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+            
+            teamBox.getChildren().addAll(rankLabel, logoView, nameLabel, spacer, ptsLabel);
+            content.getChildren().add(teamBox);
+        }
+
+        if (userWon) {
+            Label congratsLabel = new Label("Incredible performance this season, Manager "+ gameStatus.getUsername()+ "!");
+            congratsLabel.setStyle("-fx-font-size: 16px; -fx-font-style: italic; -fx-text-fill: #e67e22; -fx-padding: 10 0 0 0;");
+            content.getChildren().add(congratsLabel);
+        }
+
+        dialog.getDialogPane().setContent(content);
+        
+        try {
+            String css = getClass().getResource("/layouts/styles.css").toExternalForm();
+            dialog.getDialogPane().getStylesheets().add(css);
+        } catch (Exception e) {}
+        
+        dialog.showAndWait();
+    }
+
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

@@ -113,6 +113,23 @@ public abstract class AbstractLeague {
         }
     }
 
+    public void resetLeague() {
+        this.weeklyFixtures.clear();
+        this.completedMatches.clear();
+        this.currentWeek = 1;
+        this.totalWeeks = 0;
+        
+        for (AbstractTeam team : teams) {
+            team.resetStats();
+            for (AbstractPlayer player : team.getAllPlayers()) {
+                player.resetStats();
+            }
+            team.fillStarters(team.getRequiredStarters());
+        }
+        
+        createLeague();
+    }
+
     public abstract void createLeague();
     public abstract void playWeeklyMatch();
     public abstract void calculateLeagueResult();

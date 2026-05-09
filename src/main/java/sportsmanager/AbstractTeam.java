@@ -117,6 +117,23 @@ public abstract class AbstractTeam {
                 subIter.remove(); 
             }
         }
+
+        if (activePlayers.size() < requiredStarters) {
+            for (AbstractPlayer p : allPlayers) {
+                if (activePlayers.size() >= requiredStarters) {
+                    break;
+                }
+                if (!p.isInjured() && !activePlayers.contains(p) && !substitutePlayers.contains(p)) {
+                    activePlayers.add(p);
+                }
+            }
+        }
+        
+        for (AbstractPlayer p : allPlayers) {
+            if (!activePlayers.contains(p) && !substitutePlayers.contains(p)) {
+                substitutePlayers.add(p);
+            }
+        }
     }
 
     public boolean isReadyToPlay() {
@@ -138,6 +155,13 @@ public abstract class AbstractTeam {
         }
         this.tactic = newTactic.trim();
     }
+    
+    public void resetStats() {
+        this.winCount = 0;
+        this.lossCount = 0;
+        this.drawCount = 0;
+    }
+    
     public abstract void addPlayerToRoster(AbstractPlayer player);
     public abstract void setMatchDayLineup(List<AbstractPlayer> starters, List<AbstractPlayer> bench);
     public abstract int getRequiredStarters();
