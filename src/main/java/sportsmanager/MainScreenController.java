@@ -102,7 +102,8 @@ public class MainScreenController {
         Football sport = new Football();
         FootballLeague league = new FootballLeague("Football League");
 
-        java.util.List<FootballTeam> teams = DataGenerator.generateFootballTeams(4);
+        int teamCount = 3 + new java.util.Random().nextInt(4); 
+        java.util.List<FootballTeam> teams = DataGenerator.generateFootballTeams(teamCount);
         for (FootballTeam team : teams) {
             league.addTeam(team);
         }
@@ -119,7 +120,8 @@ public class MainScreenController {
         Handball sport = new Handball();
         HandballLeague league = new HandballLeague("Handball League");
 
-        java.util.List<HandballTeam> teams = DataGenerator.generateHandballTeams(3);
+        int teamCount = 3 + new java.util.Random().nextInt(4); 
+        java.util.List<HandballTeam> teams = DataGenerator.generateHandballTeams(teamCount);
         for (HandballTeam team : teams) {
             league.addTeam(team);
         }
