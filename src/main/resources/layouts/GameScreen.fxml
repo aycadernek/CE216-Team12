@@ -32,12 +32,12 @@
                    style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
         </right>
     </BorderPane>
-    <HBox alignment="CENTER" spacing="40">
-        <ImageView fx:id="homeTeamLogo" fitHeight="150.0" preserveRatio="true" />
+    <HBox alignment="CENTER" spacing="20">
+        <ImageView fx:id="homeTeamLogo" fitHeight="120.0" preserveRatio="true" />
         <VBox alignment="CENTER" spacing="10">
             <Label fx:id="matchTitleLabel"
                    text="Home Team vs Away Team"
-                   style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;" />
+                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
 
             <Label fx:id="scoreLabel"
                    text="0 - 0"
@@ -47,7 +47,7 @@
                    text=""
                    style="-fx-text-fill: #ffef99; -fx-font-size: 20px; -fx-font-weight: bold;" />
         </VBox>
-        <ImageView fx:id="awayTeamLogo" fitHeight="150.0" preserveRatio="true" />
+        <ImageView fx:id="awayTeamLogo" fitHeight="120.0" preserveRatio="true" />
 
     </HBox>
 
