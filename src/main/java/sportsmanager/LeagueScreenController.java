@@ -1,5 +1,8 @@
 package sportsmanager;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -104,45 +107,131 @@ public class LeagueScreenController {
     }
 
     private void showSeasonResultsPopup() {
+        if (currentGameStatus == null || currentGameStatus.getCurrentLeague() == null) return;
+
         AbstractLeague league = currentGameStatus.getCurrentLeague();
         ISport sport = currentGameStatus.getCurrentSport();
 
-        StringBuilder results = new StringBuilder();
-        results.append("Final Standings\n\n");
-
-        int rank = 1;
-        for (AbstractTeam team : league.getTeams()) {
-            int played = team.getWinCount() + team.getDrawCount() + team.getLossCount();
-            int points = (team.getWinCount() * sport.getWinPoints())
-                    + (team.getDrawCount() * sport.getDrawPoints())
-                    + (team.getLossCount() * sport.getLossPoints());
-
-            results.append(rank).append(". ")
-                    .append(team.getName())
-                    .append(" | P:").append(played)
-                    .append(" W:").append(team.getWinCount())
-                    .append(" D:").append(team.getDrawCount())
-                    .append(" L:").append(team.getLossCount())
-                    .append(" | Pts:").append(points)
-                    .append('\n');
-            rank++;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Season Results");
-        alert.setHeaderText("Season finished");
-        alert.setContentText(results.toString());
-        alert.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+        Alert popUp = new Alert(Alert.AlertType.NONE);
+        popUp.setTitle("Season Results");
+        popUp.getDialogPane().setId("seasonResultsPopup");
 
         try {
             java.net.URL cssUrl = getClass().getResource("/layouts/styles.css");
             if (cssUrl != null) {
-                alert.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+                popUp.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
             }
-        } catch (Exception e) {
+        } catch (Exception e) {}
+
+        ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        popUp.getButtonTypes().add(closeButton);
+
+        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(10);
+        content.setStyle("-fx-background-color: #0c9aa6; -fx-padding: 20;");
+
+        content.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Label titleLabel = new Label("🏆 Final Standings - " + league.getLeagueName());
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+        content.getChildren().add(titleLabel);
+
+        TableView<AbstractTeam> table = new TableView<>();
+        table.getStyleClass().add("season-results-table");
+        table.setStyle("-fx-background-color: #0c9aa6; -fx-control-inner-background: #0c9aa6; -fx-border-color: #139bb9; -fx-border-width: 2;");
+
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<AbstractTeam, Integer> rankCol = new TableColumn<>("#");
+        rankCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(table.getItems().indexOf(column.getValue()) + 1));
+        rankCol.setMinWidth(40);
+        rankCol.setMaxWidth(40);
+        rankCol.setResizable(false);
+
+        TableColumn<AbstractTeam, String> teamCol = new TableColumn<>("Team");
+        teamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        teamCol.setMinWidth(200);
+        teamCol.setPrefWidth(200);
+        teamCol.setResizable(false);
+        teamCol.getStyleClass().add("team-name-column");
+
+        TableColumn<AbstractTeam, Integer> playedCol = new TableColumn<>("PL");
+        playedCol.setCellValueFactory(data -> new SimpleIntegerProperty(
+                data.getValue().getWinCount() + data.getValue().getDrawCount() + data.getValue().getLossCount()
+        ).asObject());
+        playedCol.setMinWidth(45);
+        playedCol.setMaxWidth(45);
+        playedCol.setResizable(false);
+
+        TableColumn<AbstractTeam, Integer> winCol = new TableColumn<>("W");
+        winCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getWinCount()).asObject());
+        winCol.setMinWidth(45);
+        winCol.setMaxWidth(45);
+        winCol.setResizable(false);
+
+        TableColumn<AbstractTeam, Integer> drawCol = new TableColumn<>("D");
+        drawCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getDrawCount()).asObject());
+        drawCol.setMinWidth(45);
+        drawCol.setMaxWidth(45);
+        drawCol.setResizable(false);
+
+        TableColumn<AbstractTeam, Integer> lossCol = new TableColumn<>("L");
+        lossCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getLossCount()).asObject());
+        lossCol.setMinWidth(45);
+        lossCol.setMaxWidth(45);
+        lossCol.setResizable(false);
+
+        TableColumn<AbstractTeam, Integer> ptsCol = new TableColumn<>("Pts");
+        ptsCol.setCellValueFactory(data -> {
+            int points = (data.getValue().getWinCount() * sport.getWinPoints()) +
+                    (data.getValue().getDrawCount() * sport.getDrawPoints()) +
+                    (data.getValue().getLossCount() * sport.getLossPoints());
+            return new SimpleIntegerProperty(points).asObject();
+        });
+        ptsCol.setMinWidth(55);
+        ptsCol.setMaxWidth(55);
+        ptsCol.setResizable(false);
+
+        table.setRowFactory(tv -> new TableRow<AbstractTeam>() {
+            @Override
+            protected void updateItem(AbstractTeam team, boolean empty) {
+                super.updateItem(team, empty);
+                if (team == null || empty) {
+                    setStyle("-fx-background-color: #0c9aa6; -fx-border-color: transparent;");
+                } else {
+                    setStyle("-fx-background-color: #0c9aa6; -fx-border-color: #139bb9; -fx-border-width: 0 0 1 0;");
+                }
+            }
+        });
+
+        table.getColumns().addAll(rankCol, teamCol, playedCol, winCol, drawCol, lossCol, ptsCol);
+        table.getItems().addAll(league.getTeams());
+
+        int rowHeight = 30;
+        int headerHeight = 32;
+        table.setFixedCellSize(rowHeight);
+
+        table.setPrefWidth(477);
+        table.setMinWidth(477);
+        table.setMaxWidth(477);
+
+        double totalTableHeight = (league.getTeams().size() * rowHeight) + headerHeight + 5;
+        table.setPrefHeight(totalTableHeight);
+        table.setMinHeight(totalTableHeight);
+
+        content.getChildren().add(table);
+
+        popUp.getDialogPane().setContent(content);
+        popUp.getDialogPane().setPrefWidth(517);
+        popUp.getDialogPane().setMinWidth(517);
+        popUp.getDialogPane().setMaxWidth(517);
+        popUp.getDialogPane().setStyle("-fx-background-color: #0c9aa6; -fx-border-color: #139bb9; -fx-border-width: 3;");
+
+        Button btn = (Button) popUp.getDialogPane().lookupButton(closeButton);
+        if (btn != null) {
+            btn.setStyle("-fx-background-color: #234d20; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;");
         }
 
-        alert.showAndWait();
+        popUp.showAndWait();
     }
 
     private void showInfoPopup(String title, String message) {
