@@ -23,6 +23,8 @@ public class MainScreenController {
     @FXML private Button exitButton;
     @FXML private ImageView appLogoImageView;
 
+    private java.io.File tempPdfFile = null;
+
     @FXML
     public void initialize() {
         sportComboBox.setItems(FXCollections.observableArrayList("Football", "Handball"));
@@ -82,6 +84,14 @@ public class MainScreenController {
             
             WebView webView = new WebView();
             String url = getClass().getResource("/help_manual.html").toExternalForm();
+            
+            webView.getEngine().locationProperty().addListener((obs, oldLoc, newLoc) -> {
+                if (newLoc != null && newLoc.toUpperCase().endsWith(".PDF")) {
+                    javafx.application.Platform.runLater(() -> webView.getEngine().load(url));
+                    openHelpManualPdf();
+                }
+            });
+            
             webView.getEngine().load(url);
             
             Scene scene = new Scene(webView, 800, 600);
@@ -132,6 +142,30 @@ public class MainScreenController {
         gameStatus.setUserTeamName(teams.get(0).getName());
 
         return gameStatus;
+    }
+
+    private void openHelpManualPdf() {
+        try {
+            if (tempPdfFile == null || !tempPdfFile.exists()) {
+                java.io.InputStream in = getClass().getResourceAsStream("/USER MANUAL.pdf");
+                if (in == null) {
+                    showAlert("File Not Found", "The user manual PDF could not be found.");
+                    return;
+                }
+                java.nio.file.Path tempPath = java.nio.file.Files.createTempFile("USER_MANUAL", ".pdf");
+                tempPdfFile = tempPath.toFile();
+                tempPdfFile.deleteOnExit();
+                java.nio.file.Files.copy(in, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+            
+            if (java.awt.Desktop.isDesktopSupported()) {
+                java.awt.Desktop.getDesktop().open(tempPdfFile);
+            } else {
+                showAlert("Not Supported", "Desktop operations are not supported on this system.");
+            }
+        } catch (Exception e) {
+            showAlert("Error", "Could not open the PDF: " + e.getMessage());
+        }
     }
 
     private void showAlert(String title, String message) {
