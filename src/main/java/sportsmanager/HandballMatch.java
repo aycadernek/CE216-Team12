@@ -165,6 +165,7 @@ public class HandballMatch extends AbstractMatch {
     private void handle2MinuteSuspensionHandle(HandballTeam team, HandballPlayer suspended, String timeStr) {
         suspended.receiveTwoMinuteSuspension(); 
         if (suspended.getTwoMinuteSuspensions() >= 3) {  
+            suspended.receiveRedCard();
             removePlayerFromPitch(team, suspended, timeStr, "DISQUALIFICATION");
         } else {
             getEvents().add(timeStr + ": 2-MINUTE SUSPENSION! " + suspended.getName() + " is sent to the bench. " + team.getName());
@@ -174,6 +175,7 @@ public class HandballMatch extends AbstractMatch {
     private void handleRedCard(HandballTeam team, String timeStr) {
         HandballPlayer carded = getRandomPlayer(team);
         if (carded != null) {
+            carded.receiveRedCard();
             if (random.nextInt(100) < 15) {
                 removePlayerFromPitch(team, carded, timeStr, "BLUE_CARD");
             } else {

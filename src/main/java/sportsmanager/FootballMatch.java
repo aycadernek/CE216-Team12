@@ -108,6 +108,7 @@ public class FootballMatch extends AbstractMatch {
         if (carded == null) return;
         carded.receiveYellowCard();
         if (carded.getYellowCards() >= 2) {
+            carded.receiveRedCard();
             removePlayerFromPitch(team, carded, timeStr, "SECOND_YELLOW");
         } else {
             getEvents().add(timeStr + ": YELLOW CARD - " + carded.getName() + " (" + team.getName() + ")");
@@ -117,6 +118,7 @@ public class FootballMatch extends AbstractMatch {
     private void handleRedCard(FootballTeam team, String timeStr) {
         FootballPlayer carded = getRandomPlayer(team);
         if (carded != null) {
+            carded.receiveRedCard();
             removePlayerFromPitch(team, carded, timeStr, "RED_CARD");
         }
     }
