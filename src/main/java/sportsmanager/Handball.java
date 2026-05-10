@@ -21,7 +21,7 @@ public class Handball implements ISport{
         this.sportName = "Handball";
         this.playerCount = 7;
         this.substituteCount = 7;
-        this.substituteChangeLimit = 99;
+        this.substituteChangeLimit = Integer.MAX_VALUE;
         this.teamCount = 2;
         this.periodCount = 2;
         this.matchupsPerTeam = 2;

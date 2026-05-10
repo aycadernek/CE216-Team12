@@ -34,6 +34,7 @@ public class GameScreenController {
 
     private GameStatus gameStatus;
     private AbstractMatch currentMatch;
+    private int userSubsUsed;
 
     @FXML
     public void initialize() {
@@ -47,6 +48,7 @@ public class GameScreenController {
     public void setGameData(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
         this.currentMatch = findUserTeamMatch();
+        this.userSubsUsed = 0;
 
         if (currentMatch == null) {
             matchTitleLabel.setText("No match found");
@@ -179,9 +181,16 @@ public class GameScreenController {
         return;
     }
 
+        int subLimit = gameStatus.getCurrentSport().getSubstituteChangeLimit();
+        if (userSubsUsed >= subLimit) {
+            showInfoPopup("Substitution Limit Reached", "You have reached the maximum substitution limit (" + subLimit + ") for this match.");
+            return;
+        }
+
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Live Substitution");
-        dialog.setHeaderText("Choose a player to substitute");
+        String remainingText = (subLimit == Integer.MAX_VALUE) ? "Unlimited" : String.valueOf(subLimit - userSubsUsed);
+        dialog.setHeaderText("Choose a player to substitute (Remaining: " + remainingText + ")");
 
         ButtonType confirmButton = new ButtonType("Confirm Substitution",ButtonBar.ButtonData.LEFT);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -231,6 +240,7 @@ public class GameScreenController {
     );
 
         dialog.getDialogPane().setContent(content);
+        
 
         try {
             String css = getClass().getResource("/layouts/styles.css").toExternalForm();
@@ -251,6 +261,8 @@ public class GameScreenController {
 
             try {
                 selectedTeam.substitutePlayer(outPlayer, inPlayer);
+                
+                userSubsUsed++;
 
                 String eventText = "SUBSTITUTION: "
                         + selectedTeam.getName()
@@ -482,6 +494,7 @@ public class GameScreenController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        alert.getDialogPane().setMinWidth(700);
 
         try {
             String css = getClass().getResource("/layouts/styles.css").toExternalForm();
