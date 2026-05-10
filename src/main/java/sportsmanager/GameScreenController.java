@@ -349,6 +349,11 @@ public class GameScreenController {
                 }
 
                 String oldTactic = selectedTeam.getTactic();
+                
+                if (oldTactic != null && oldTactic.equals(selectedTactic)) {
+                    showInfoPopup("No Change", "The team is already using the '" + selectedTactic + "' tactic.");
+                    return null; 
+                }
 
                 try {
                     selectedTeam.changeTactic(selectedTactic);
